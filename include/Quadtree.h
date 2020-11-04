@@ -2,9 +2,10 @@
 #define __QUADTREE__
 
 #include "Color.h"
+#include "Pixel.h"
 
 typedef struct node{
-	int label;
+	Pixel* pixel;
 	Color *rgba;
 	struct node *sonNW;
 	struct node *sonNE;
@@ -16,13 +17,13 @@ typedef struct node{
  * Create a node with the element in argument.
  * @return a pointor to a node.
  */
-Node* create_node(int label, Color* color);
+Node* create_node(Color* color, Pixel* p);
 
 /**
  * Initialize a node with the label and a color.
  * @return void.
  */
-void init_node(Node* node, int label, Color* color);
+void init_node(Node* node, Color* color, Pixel* p);
 
 /**
  * Add sons to a quadtree.
@@ -41,5 +42,12 @@ void display_qt(Quadtree qt);
  * @return 1 if it is a leave else 0.
  */
 int is_leave(Node* node);
+
+/**
+ * Verify if the Quadtree is empty.
+ * @argument qt a Quadtree.
+ * @return 1 if the Quadtree is empty else 0.
+ */
+int is_empty(Quadtree qt);
 
 #endif

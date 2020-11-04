@@ -8,7 +8,7 @@
  * a file named file_name.
  * @return 1 if executed correctly else 0.
  */
-int compression(char* file_name, Quadtree qt);
+int compression(char* file_name, Quadtree qt, int display_type);
 
 /**
  * Compression of a Quadtree and the compression in
@@ -34,6 +34,5 @@ int compression_Color(char* file_name, Quadtree qt);
  * @return void
  */
 void count_bit(Quadtree qt, int* len_bits, int display_color);
-
 
 #endif

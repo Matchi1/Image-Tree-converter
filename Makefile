@@ -41,6 +41,12 @@ BitFile.o: BitFile.c BitFile.h
 Menu.o: Menu.c Menu.h  
 	$(CC) -o $(BIN_PATH)$@ -c $< $(CFLAGS)
 
+Input_img.o: Input_img.c Input_img.h  
+	$(CC) -o $(BIN_PATH)$@ -c $< $(CFLAGS)
+	
+Pixel.o: Pixel.c Pixel.h  
+	$(CC) -o $(BIN_PATH)$@ -c $< $(CFLAGS)
+
 clean:
 	rm -f $(BIN_PATH)*.o
 

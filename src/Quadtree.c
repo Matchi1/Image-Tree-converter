@@ -3,7 +3,7 @@
 #include <assert.h>
 #include "../include/Quadtree.h"
 
-Node* create_node(int label, Color* color){
+Node* create_node(Color* color, Pixel* p){
 	Node* node;
 
 	assert(color != NULL);
@@ -12,14 +12,14 @@ Node* create_node(int label, Color* color){
 	if(node == NULL)
 		return NULL;
 
-	init_node(node, label, color);
+	init_node(node, color, p);
 	return node;	
 }
 
-void init_node(Node* node, int label, Color* color){
+void init_node(Node* node, Color* color, Pixel* p){
 	assert(node != NULL);
 
-	node->label = label;
+	node->pixel = p;
 	node->rgba = color;	
 	node->sonNW = NULL;
 	node->sonNE = NULL;
@@ -50,7 +50,7 @@ int is_leave(Node* node){
 void display_node(Node* node){
 	assert(node != NULL);
 
-	printf("label : %d\n", node->label);	
+	display_pixel(node->pixel);
 	display_color(node->rgba);	
 }
 
@@ -64,4 +64,12 @@ void display_qt(Quadtree qt){
 	display_qt(qt->sonNE);
 	display_qt(qt->sonSW);
 	display_qt(qt->sonSE);
+}
+
+int is_empty(Quadtree qt){
+	if(qt == NULL){
+		printf("Arbre Vide\n");
+		return 1;
+	}
+	return 0;
 }
