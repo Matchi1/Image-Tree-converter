@@ -8,21 +8,7 @@
  * a file named file_name.
  * @return 1 if executed correctly else 0.
  */
-int compression(char* file_name, Quadtree qt, int display_type);
-
-/**
- * Compression of a Quadtree and the compression in
- * a file named file_name for black and white image.
- * @return 1 if executed correctly else 0.
- */
-int compression_B_W(char* file_name, Quadtree qt);
-
-/**
- * Compression of a Quadtree and the compression in
- * a file named file_name for rgba image.
- * @return 1 if executed correctly else 0.
- */
-int compression_Color(char* file_name, Quadtree qt);
+int compression(char* file_name, Quadtree qt);
 
 /**
  * Count the number of bit a Quadtree will generate during

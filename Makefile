@@ -47,6 +47,12 @@ Input_img.o: Input_img.c Input_img.h
 Pixel.o: Pixel.c Pixel.h  
 	$(CC) -o $(BIN_PATH)$@ -c $< $(CFLAGS)
 
+Extension.o: Extension.c Extension.h  
+	$(CC) -o $(BIN_PATH)$@ -c $< $(CFLAGS)
+
+Display_qt.o: Display_qt.c Display_qt.h  
+	$(CC) -o $(BIN_PATH)$@ -c $< $(CFLAGS)
+
 clean:
 	rm -f $(BIN_PATH)*.o
 

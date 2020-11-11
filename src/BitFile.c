@@ -28,8 +28,8 @@ void init_BitFile(BitFile* f, char* file_name, char* format){
 int close_BitFile(BitFile* f){
 	if(f->nb_bit != BIT_MAX){
 		f->buf <<= BIT_MAX - f->nb_bit;
-		fputc(f->buf, f->file);
 	}
+	fputc(f->buf, f->file);
 	return fclose(f->file);
 }
 

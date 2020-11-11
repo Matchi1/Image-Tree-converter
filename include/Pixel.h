@@ -7,6 +7,15 @@ typedef struct {
 } Pixel;
 
 /**
+ * Create a Pixel.
+ * @parameters x position of the pixel in the x axis.
+ * 			   y position of the pixel in the y axis.
+ * 			   length length of the pixel.
+ * @return a Pixel if there is enough memory space else NULL.
+ */
+Pixel* create_pixel(int x, int y, int length);
+
+/**
  * Initialize a Pixel
  * @argument p a pointor to a Pixel
  * 			 x position in the x axis

@@ -6,7 +6,6 @@
 Node* create_node(Color* color, Pixel* p){
 	Node* node;
 
-	assert(color != NULL);
 	node = (Node*)malloc(sizeof(Node));
 
 	if(node == NULL)
@@ -42,16 +41,17 @@ int add_sons(Quadtree qt, int nb_sons, Node* sons){
 }
 
 int is_leave(Node* node){
-	if(node->sonNW == NULL || node->sonNE == NULL || node->sonSW == NULL || node->sonSE == NULL)
-		return 0;
-	return 1;
+	if(node->sonNW == NULL && node->sonNE == NULL && node->sonSW == NULL && node->sonSE == NULL)
+		return 1;
+	return 0;
 }
 
 void display_node(Node* node){
 	assert(node != NULL);
-
-	display_pixel(node->pixel);
-	display_color(node->rgba);	
+	if(node->pixel != NULL)
+		display_pixel(node->pixel);
+	if(node->rgba != NULL)
+		display_color(node->rgba);	
 }
 
 void display_qt(Quadtree qt){

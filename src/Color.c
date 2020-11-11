@@ -9,7 +9,6 @@ Color* create_color(Byte* rgba){
 	color = (Color*)malloc(sizeof(Color));
 	if(color == NULL)
 		return NULL;
-
 	init_color(color, rgba);
 	return color;
 }
@@ -23,10 +22,12 @@ void init_color(Color* color, Byte* rgba){
 }
 
 void display_color(Color* color){
-	printf("Red : %d\n", color->r);
-	printf("Blue : %d\n", color->b);
-	printf("Green : %d\n", color->g);
-	printf("Alpha : %d\n", color->a);
+	if(color != NULL){
+		printf("Red : %d\n", color->r);
+		printf("Blue : %d\n", color->b);
+		printf("Green : %d\n", color->g);
+		printf("Alpha : %d\n", color->a);
+	}
 }
 
 int verify_color(Color* c1, Color* c2){

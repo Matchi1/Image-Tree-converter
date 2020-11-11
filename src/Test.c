@@ -2,11 +2,15 @@
 #include <stdlib.h>
 #include <time.h>
 #include <assert.h>
+#include <unistd.h>
 #include "../include/Test.h"
 #include "../include/Quadtree.h"
 #include "../include/BitFile.h"
 #include "../include/Color.h"
 #include "../include/Graphic.h"
+#include "../include/Compression.h"
+#include "../include/Decompression.h"
+#include "../include/Display_qt.h"
 
 Byte* generate_rgba(){
 	Byte* rgba;
@@ -44,9 +48,34 @@ Node* generate_node(int len_color, Color* arr_color){
 		return NULL;
 
 	for(i = 0; i < len_color; i++){
-		init_node(&arr_node[i], 0, &arr_color[i]);
+		init_node(&arr_node[i], &arr_color[i], NULL);
 	}
 	return arr_node;
+}
+
+Pixel* generate_pixel(){
+	int x, y, length;
+	Pixel* pixel;
+
+	x = rand() % MAXPIXEL;
+	y = rand() % MAXPIXEL;
+	length = rand() % MAXPIXEL;
+
+	pixel = create_pixel(x, y, length);
+	return pixel;
+}
+
+void generate_qt(Quadtree *qt){
+
+	*qt = create_node(generate_color(1), generate_pixel());
+	(*qt)->sonNW = create_node(generate_color(1), generate_pixel());
+	(*qt)->sonNE = create_node(generate_color(1), generate_pixel());
+	(*qt)->sonSE = create_node(generate_color(1), generate_pixel());
+	(*qt)->sonSW = create_node(generate_color(1), generate_pixel());
+	(*qt)->sonNW->sonNW = create_node(generate_color(1), generate_pixel());
+	(*qt)->sonNW->sonNE = create_node(generate_color(1), generate_pixel());
+	(*qt)->sonNW->sonSE = create_node(generate_color(1), generate_pixel());
+	(*qt)->sonNW->sonSW = create_node(generate_color(1), generate_pixel());
 }
 
 void generate_File(BitFile* out, int len_arr, int* arr_bit){
@@ -134,6 +163,30 @@ int test_read_write_BitFile(){
 	return 1;
 }
 
+int comp_decomp(){
+	Quadtree qt;
+	Quadtree qt_decomp;
+	char file_name[] = "test/test.qtc";
+	
+	srand(time(NULL));
+	generate_qt(&qt);
+	qt_decomp = NULL;
+
+	if(qt == NULL)
+		return 0;
+	
+	printf("\tCompression... ");
+	compression(file_name, qt);
+	display_qt_pdf(qt);
+	usleep(6000000);
+	
+	printf("\tDecompression... ");
+	decompression(file_name, &qt_decomp);	
+	display_qt_pdf(qt_decomp);
+
+	return 1;
+}
+
 int test_Quadtree(){
 	printf("TEST QUADTREE\n");
 	if(test_add_sons() == 0)
@@ -148,10 +201,19 @@ int test_BitFile(){
 	return 1;
 }
 
+int test_Comp_Decomp(){
+	printf("  TEST COMPRESSION ET DECOMPRESSION\n");
+	if(comp_decomp() == 0)
+		return 0;
+	return 1;
+}
+
 int test(){
 	if(test_Quadtree() == 0)
 		return 0;
 	if(test_BitFile() == 0)
+		return 0;
+	if(test_Comp_Decomp() == 0)
 		return 0;
 	return 1;
 }

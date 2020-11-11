@@ -8,6 +8,6 @@
  * its content into a Quadtree.
  * @return 1 if executed correctly else 0.
  */
-int decompression(char* file_name, Quadtree* qt, int display_type);
+int decompression(char* file_name, Quadtree* qt);
 
 #endif
