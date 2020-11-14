@@ -41,9 +41,9 @@ int read_B_W(BitFile* in, Node* node){
 	int bit = read_BitFile(in);
 
 	if(bit == 1)
-		node->rgba = create_color(Black);
+		node->pixel->color = create_color(Black);
 	else if(bit == 0)
-		node->rgba = create_color(White);
+		node->pixel->color = create_color(White);
 	else 
 		return EOF;
 	return 1;
@@ -60,7 +60,7 @@ int read_body_B_W(BitFile* in, Quadtree* qt, int* total_bits){
 	}
 	(*total_bits)--;
 
-	node = create_node(NULL, NULL);
+	node = create_node(NULL, 0);
 	bit = read_BitFile(in);
 	if(bit == 0){
 		*qt = node;
@@ -111,7 +111,7 @@ Color* read_color(BitFile* in){
 }
 
 int read_body_color(BitFile* in, Quadtree* qt, int* total_bits){
-	Color* color;
+	Pixel* pixel;
 	int bit;
 	assert(qt != NULL);	
 	
@@ -120,11 +120,12 @@ int read_body_color(BitFile* in, Quadtree* qt, int* total_bits){
 		return 1;
 	}
 	
-	color = NULL;
+	pixel = create_pixel(0, 0, 1, NULL);
 	(*total_bits)--;
 	bit = read_BitFile(in);
+	*qt = create_node(NULL, 0);
+
 	if(bit == 0){
-		*qt = create_node(NULL, NULL);
 		if(read_body_color(in, &(*qt)->sonNW, total_bits) == EOF)
 			return EOF;
 		if(read_body_color(in, &(*qt)->sonNE, total_bits) == EOF)
@@ -133,14 +134,12 @@ int read_body_color(BitFile* in, Quadtree* qt, int* total_bits){
 			return EOF;
 		if(read_body_color(in, &(*qt)->sonSW, total_bits) == EOF)
 			return EOF;
-	} else if(bit == 1){
-		(*total_bits) -= 32;
-		color = read_color(in);
-		if(color == NULL)
-			return EOF;
-		*qt = create_node(color, NULL);
 	} else {
-		return EOF;
+		(*total_bits) -= 32;
+		pixel->color = read_color(in);
+		if(pixel->color == NULL)
+			return EOF;
+		(*qt)->pixel = pixel;
 	}
 	return 1;
 }

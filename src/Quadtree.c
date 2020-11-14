@@ -3,7 +3,7 @@
 #include <assert.h>
 #include "../include/Quadtree.h"
 
-Node* create_node(Color* color, Pixel* p){
+Node* create_node(Pixel* p, int error_val){
 	Node* node;
 
 	node = (Node*)malloc(sizeof(Node));
@@ -11,31 +11,31 @@ Node* create_node(Color* color, Pixel* p){
 	if(node == NULL)
 		return NULL;
 
-	init_node(node, color, p);
+	init_node(node, p, error_val);
 	return node;	
 }
 
-void init_node(Node* node, Color* color, Pixel* p){
+void init_node(Node* node, Pixel* p, int error_val){
 	assert(node != NULL);
 
 	node->pixel = p;
-	node->rgba = color;	
+	node->error_val = error_val;
 	node->sonNW = NULL;
 	node->sonNE = NULL;
 	node->sonSE = NULL;
 	node->sonSW = NULL;
 }
 
-int add_sons(Quadtree qt, int nb_sons, Node* sons){
+int add_sons(Quadtree qt, int nb_sons, Node* arr_sons){
 	assert(qt != NULL);
 
 	if(nb_sons == 0)
 		return 0;	
 
-	qt->sonNW = &sons[0];
-	qt->sonNE = &sons[1];
-	qt->sonSE = &sons[2];
-	qt->sonSW = &sons[3];
+	qt->sonNW = &arr_sons[0];
+	qt->sonNE = &arr_sons[1];
+	qt->sonSE = &arr_sons[2];
+	qt->sonSW = &arr_sons[3];
 
 	return 1;
 }
@@ -50,8 +50,6 @@ void display_node(Node* node){
 	assert(node != NULL);
 	if(node->pixel != NULL)
 		display_pixel(node->pixel);
-	if(node->rgba != NULL)
-		display_color(node->rgba);	
 }
 
 void display_qt(Quadtree qt){

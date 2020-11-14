@@ -53,6 +53,9 @@ Extension.o: Extension.c Extension.h
 Display_qt.o: Display_qt.c Display_qt.h  
 	$(CC) -o $(BIN_PATH)$@ -c $< $(CFLAGS)
 
+Calcul.o: Calcul.c Calcul.h  
+	$(CC) -o $(BIN_PATH)$@ -c $< $(CFLAGS)
+
 clean:
 	rm -f $(BIN_PATH)*.o
 

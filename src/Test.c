@@ -3,6 +3,7 @@
 #include <time.h>
 #include <assert.h>
 #include <unistd.h>
+#include <MLV/MLV_all.h>
 #include "../include/Test.h"
 #include "../include/Quadtree.h"
 #include "../include/BitFile.h"
@@ -39,43 +40,50 @@ Color* generate_color(int len_color){
 	return arr_color;
 }
 
-Node* generate_node(int len_color, Color* arr_color){
+Node* generate_node(int nb_node, Pixel* pixel){
 	Node* arr_node;
    	int i;
 
-	arr_node = (Node*)malloc(sizeof(Node) * len_color);
+	arr_node = (Node*)malloc(sizeof(Node) * nb_node);
 	if(arr_node == NULL)
 		return NULL;
 
-	for(i = 0; i < len_color; i++){
-		init_node(&arr_node[i], &arr_color[i], NULL);
+	for(i = 0; i < nb_node; i++){
+		init_node(&arr_node[i], pixel, 0);
 	}
 	return arr_node;
 }
 
-Pixel* generate_pixel(){
-	int x, y, length;
-	Pixel* pixel;
+Pixel* generate_pixel(int nb_pixel){
+	int x, y, length, i;
+	Pixel* arr_pixel;
+	Color* color;
+	
+	arr_pixel = (Pixel*)malloc(sizeof(Pixel) * nb_pixel);
+	if(arr_pixel == NULL)
+		return NULL;
 
-	x = rand() % MAXPIXEL;
-	y = rand() % MAXPIXEL;
-	length = rand() % MAXPIXEL;
-
-	pixel = create_pixel(x, y, length);
-	return pixel;
+	for(i = 0; i < nb_pixel; i++){
+		x = rand() % MAXPIXEL;
+		y = rand() % MAXPIXEL;
+		length = rand() % MAXPIXEL;
+		color = generate_color(1);
+		init_pixel(&(arr_pixel[i]), x, y, length, color);
+	}
+	return arr_pixel;
 }
 
 void generate_qt(Quadtree *qt){
 
-	*qt = create_node(generate_color(1), generate_pixel());
-	(*qt)->sonNW = create_node(generate_color(1), generate_pixel());
-	(*qt)->sonNE = create_node(generate_color(1), generate_pixel());
-	(*qt)->sonSE = create_node(generate_color(1), generate_pixel());
-	(*qt)->sonSW = create_node(generate_color(1), generate_pixel());
-	(*qt)->sonNW->sonNW = create_node(generate_color(1), generate_pixel());
-	(*qt)->sonNW->sonNE = create_node(generate_color(1), generate_pixel());
-	(*qt)->sonNW->sonSE = create_node(generate_color(1), generate_pixel());
-	(*qt)->sonNW->sonSW = create_node(generate_color(1), generate_pixel());
+	*qt = create_node(generate_pixel(1), 0);
+	(*qt)->sonNW = create_node(generate_pixel(1), 0);
+	(*qt)->sonNE = create_node(generate_pixel(1), 0);
+	(*qt)->sonSE = create_node(generate_pixel(1), 0);
+	(*qt)->sonSW = create_node(generate_pixel(1), 0);
+	(*qt)->sonNW->sonNW = create_node(generate_pixel(1), 0);
+	(*qt)->sonNW->sonNE = create_node(generate_pixel(1), 0);
+	(*qt)->sonNW->sonSE = create_node(generate_pixel(1), 0);
+	(*qt)->sonNW->sonSW = create_node(generate_pixel(1), 0);
 }
 
 void generate_File(BitFile* out, int len_arr, int* arr_bit){
@@ -110,31 +118,6 @@ int* random_arr_bit(unsigned int len_arr){
 		arr_bit[i] = rand() % 2;
 	}
 	return arr_bit;
-}
-
-int test_add_sons(){
-	Color* arr_color;
-	Node* arr_node;
-	int i;
-	
-	printf("  TEST ADD SONS\n");
-	srand(time(NULL));	
-
-	for(i = 0; i < 10; i++){
-		arr_color = generate_color(4);
-		arr_node = generate_node(4, arr_color);
-		if(verify_color(arr_node[0].rgba, &arr_color[0]) == 0 
-			|| verify_color(arr_node[1].rgba, &arr_color[1]) == 0 
-			|| verify_color(arr_node[2].rgba, &arr_color[2]) == 0 
-			|| verify_color(arr_node[3].rgba, &arr_color[3]) == 0){
-			printf("  Erreur\n");
-			return 0;
-		}
-		free(arr_color);
-		free(arr_node);
-	}
-	printf("OK\n");
-	return 1;
 }
 
 int test_read_write_BitFile(){
@@ -178,7 +161,7 @@ int comp_decomp(){
 	printf("\tCompression... ");
 	compression(file_name, qt);
 	display_qt_pdf(qt);
-	usleep(6000000);
+	MLV_wait_milliseconds(100);
 	
 	printf("\tDecompression... ");
 	decompression(file_name, &qt_decomp);	
@@ -189,8 +172,6 @@ int comp_decomp(){
 
 int test_Quadtree(){
 	printf("TEST QUADTREE\n");
-	if(test_add_sons() == 0)
-		return 0;
 	return 1;
 }
 

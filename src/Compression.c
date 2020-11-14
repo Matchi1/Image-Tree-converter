@@ -49,7 +49,7 @@ int write_padding(BitFile* out, int padding){
 }
 
 void write_B_W(BitFile* out, Node* node){
-	if(!is_white(node->rgba))
+	if(!is_white(node->pixel->color))
 		write_BitFile(out, 0);
 	else 
 		write_BitFile(out, 1);
@@ -92,7 +92,7 @@ void prefix_B_W(BitFile* out, Quadtree qt){
 void prefix_color(BitFile* out, Quadtree qt){
 	if(is_leave(qt) == 1){
 		write_BitFile(out, 1);
-		write_color(out, qt->rgba);
+		write_color(out, qt->pixel->color);
 	} else {
 		write_BitFile(out, 0);
 		prefix_color(out, qt->sonNW);

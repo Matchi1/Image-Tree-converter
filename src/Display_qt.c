@@ -11,26 +11,32 @@ void write_beginning(FILE *f){
 }
 
 void write_qt(FILE *f, Quadtree qt){
+	Pixel* pixel;
+	Color* color;
+
+	pixel = qt->pixel;
+	if(pixel != NULL)
+		color = pixel->color;
 
     if(NULL != qt){
-		if(qt->rgba != NULL && qt->pixel != NULL)
-			fprintf(f, "    n%p [label=\"<sonNW> | <sonNE> | <x> %d | <y> %d | <r> %d | <g> %d | <b> %d | <a> %d | <sonSE> | <sonSW>\"]\n", 
-				(void*)qt, qt->pixel->x, qt->pixel->y, qt->rgba->r, qt->rgba->g, qt->rgba->b, qt->rgba->a);
-		else if(qt->rgba != NULL) 
-			fprintf(f, "    n%p [label=\"<sonNW> | <sonNE> | <x> | <y> | <r> %d | <g> %d | <b> %d | <a> %d | <sonSE> | <sonSW>\"]\n", 
-				(void*)qt, qt->rgba->r, qt->rgba->g, qt->rgba->b, qt->rgba->a);
+		if(pixel != NULL && color != NULL)
+			fprintf(f, "    n%p [label=\"<sonNW> | <sonNE> | <x> %d | <y> %d | <error_val> %d | <r> %d | <g> %d | <b> %d | <a> %d | <sonSE> | <sonSW>\"]\n", 
+				(void*)qt, pixel->x, pixel->y, qt->error_val, color->r, color->g, color->b, color->a);
+		else if(pixel != NULL && color == NULL) 
+			fprintf(f, "    n%p [label=\"<sonNW> | <sonNE> | <x> %d | <y> %d | <error_val> %d | <r> | <g> | <b> | <a> | <sonSE> | <sonSW>\"]\n", 
+				(void*)qt, pixel->x, pixel->y, qt->error_val);
 		else  
-			fprintf(f, "    n%p [label=\"<sonNW> | <sonNE> | <x> | <y> | <r> | <g> | <b> | <a> | <sonSE> | <sonSW>\"]\n", 
-				(void*)qt);
+			fprintf(f, "    n%p [label=\"<sonNW> | <sonNE> | <x> | <y> | <error_val> %d | <r> | <g> | <b> | <a> | <sonSE> | <sonSW>\"]\n", 
+				(void*)qt, qt->error_val);
 
         if(!is_leave(qt)){
-            fprintf(f, "    n%p:sonNW:c -> n%p:g;\n", (void*)qt, (void*)qt->sonNW);
+            fprintf(f, "    n%p:sonNW:c -> n%p:r;\n", (void*)qt, (void*)qt->sonNW);
             write_qt(f, qt->sonNW);
-            fprintf(f, "    n%p:sonNE:c -> n%p:g;\n", (void*)qt, (void*)qt->sonNE);
+            fprintf(f, "    n%p:sonNE:c -> n%p:r;\n", (void*)qt, (void*)qt->sonNE);
             write_qt(f, qt->sonNE);
-            fprintf(f, "    n%p:sonSE:c -> n%p:g;\n", (void*)qt, (void*)qt->sonSE);
+            fprintf(f, "    n%p:sonSE:c -> n%p:r;\n", (void*)qt, (void*)qt->sonSE);
             write_qt(f, qt->sonSE);
-            fprintf(f, "    n%p:sonSW:c -> n%p:g;\n", (void*)qt, (void*)qt->sonSW);
+            fprintf(f, "    n%p:sonSW:c -> n%p:r;\n", (void*)qt, (void*)qt->sonSW);
             write_qt(f, qt->sonSW);
         }
     }
