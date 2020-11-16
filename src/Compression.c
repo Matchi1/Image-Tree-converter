@@ -55,7 +55,7 @@ void write_B_W(BitFile* out, Node* node){
 		write_BitFile(out, 1);
 }
 
-void write_unite(BitFile* out, Byte unite){
+void write_unite(BitFile* out, int unite){
 	int i;
 	int bit;
 	int mask;

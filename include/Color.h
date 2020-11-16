@@ -1,23 +1,21 @@
 #ifndef __COLOR__
 #define __COLOR__
 
-typedef unsigned char Byte;
-
 typedef struct color{
-	Byte r,g,b,a;
+	int r,g,b,a;
 }Color;
 
 /**
  * Create a new color depending  on the argument.
  * @return a pointor to this color.
  */
-Color* create_color(Byte* rgba);
+Color* create_color(int* rgba);
 
 /**
  * Initialize a color depending on the argument.
  * @return void.
  */
-void init_color(Color* color, Byte* rgba);
+void init_color(Color* color, int* rgba);
 
 /**
  * Display the colors contained in color.

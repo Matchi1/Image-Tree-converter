@@ -1,9 +1,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
+#include <MLV/MLV_all.h>
 #include "../include/Color.h"
 
-Color* create_color(Byte* rgba){
+Color* create_color(int* rgba){
 	Color* color;
 
 	color = (Color*)malloc(sizeof(Color));
@@ -13,7 +14,7 @@ Color* create_color(Byte* rgba){
 	return color;
 }
 
-void init_color(Color* color, Byte* rgba){
+void init_color(Color* color, int* rgba){
 	assert(color != NULL);
 	color->r = rgba[0];
 	color->g = rgba[1];
@@ -24,8 +25,8 @@ void init_color(Color* color, Byte* rgba){
 void display_color(Color* color){
 	if(color != NULL){
 		printf("Red : %d\n", color->r);
-		printf("Blue : %d\n", color->b);
 		printf("Green : %d\n", color->g);
+		printf("Blue : %d\n", color->b);
 		printf("Alpha : %d\n", color->a);
 	}
 }

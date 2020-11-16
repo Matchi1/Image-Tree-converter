@@ -49,11 +49,11 @@ int test_read_write_BitFile();
 Byte* generate_rgba();
 
 /**
- * Generate 'len_color' random Color.
- * @return an array of Color if there is enough memory space
+ * Generate 'len_color' random MLV_Color.
+ * @return an array of MLV_Color if there is enough memory space
  * else NULL.
  */
-Color* generate_color(int len_color);
+MLV_Color* generate_color(int len_color);
 
 /**
  * Generate 'len_color' Node.
@@ -61,6 +61,6 @@ Color* generate_color(int len_color);
  * @return an array of Node if there is enough memory space
  * else NULL.
  */
-Node* generate_node(int len_colorn, Color* arr_color);
+Node* generate_node(int len_colorn, MLV_Color* arr_color);
 
 #endif

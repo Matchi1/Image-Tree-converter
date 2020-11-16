@@ -3,6 +3,6 @@
 
 #include "Color.h"
 
-int dist(Color* c1, Color* c2);
+float dist(const Color* c1, const Color* c2);
 
 #endif

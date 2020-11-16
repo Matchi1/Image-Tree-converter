@@ -18,8 +18,9 @@ void write_qt(FILE *f, Quadtree qt){
 	if(pixel != NULL)
 		color = pixel->color;
 
+	printf("hello\n");
     if(NULL != qt){
-		if(pixel != NULL && color != NULL)
+		if(NULL != pixel && NULL != color)
 			fprintf(f, "    n%p [label=\"<sonNW> | <sonNE> | <x> %d | <y> %d | <error_val> %d | <r> %d | <g> %d | <b> %d | <a> %d | <sonSE> | <sonSW>\"]\n", 
 				(void*)qt, pixel->x, pixel->y, qt->error_val, color->r, color->g, color->b, color->a);
 		else if(pixel != NULL && color == NULL) 
@@ -38,8 +39,12 @@ void write_qt(FILE *f, Quadtree qt){
             write_qt(f, qt->sonSE);
             fprintf(f, "    n%p:sonSW:c -> n%p:r;\n", (void*)qt, (void*)qt->sonSW);
             write_qt(f, qt->sonSW);
-        }
-    }
+        } else {
+			display_pixel(pixel);
+		}
+    } else {
+		printf("A node is NULL.\n");
+	}
 }
 
 void write_end(FILE *f){

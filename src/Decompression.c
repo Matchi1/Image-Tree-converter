@@ -2,13 +2,14 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <math.h>
+#include <MLV/MLV_all.h>
 #include "../include/Extension.h"
 #include "../include/Decompression.h"
 #include "../include/BitFile.h"
 #include "../include/Color.h"
 
-Byte Black[4] = {0, 0, 0, 0};
-Byte White[4] = {255, 255, 255, 255};
+int Black[4] = {0, 0, 0, 0};
+int White[4] = {255, 255, 255, 255};
 
 int count_bit_file(char* file_name){
 	int bits;
@@ -45,7 +46,7 @@ int read_B_W(BitFile* in, Node* node){
 	else if(bit == 0)
 		node->pixel->color = create_color(White);
 	else 
-		return EOF;
+		return 0;
 	return 1;
 }
 
@@ -64,25 +65,25 @@ int read_body_B_W(BitFile* in, Quadtree* qt, int* total_bits){
 	bit = read_BitFile(in);
 	if(bit == 0){
 		*qt = node;
-		if(read_body_B_W(in, &(*qt)->sonNW, total_bits) == EOF)
-			return EOF;
-		if(read_body_B_W(in, &(*qt)->sonNE, total_bits) == EOF)
-			return EOF;
-		if(read_body_B_W(in, &(*qt)->sonSE, total_bits) == EOF)
-			return EOF;
-		if(read_body_B_W(in, &(*qt)->sonSW, total_bits) == EOF)
-			return EOF;
+		if(read_body_B_W(in, &(*qt)->sonNW, total_bits) == 0)
+			return 0;
+		if(read_body_B_W(in, &(*qt)->sonNE, total_bits) == 0)
+			return 0;
+		if(read_body_B_W(in, &(*qt)->sonSE, total_bits) == 0)
+			return 0;
+		if(read_body_B_W(in, &(*qt)->sonSW, total_bits) == 0)
+			return 0;
 	} else if(bit == 1) {
 		(*total_bits)--;
-		if(read_B_W(in, node) == EOF)
-			return EOF;
+		if(read_B_W(in, node) == 0)
+			return 0;
 	} else {
-		return EOF;
+		return 0;
 	}
 	return 1;
 }
 
-int read_unite(BitFile* in, Byte* unite){
+int read_unite(BitFile* in, int* unite){
 	int i, bit;
 
 	for(i = 7; i >= 0; i--){
@@ -90,17 +91,17 @@ int read_unite(BitFile* in, Byte* unite){
 		if(bit == 1)
 			*unite += pow(2, i);
 		else if(bit == EOF)
-			return EOF;
+			return 0;
 	}
 	return 1;
 }
 
 Color* read_color(BitFile* in){
 	int i;
-	Byte* rgba;
+	int* rgba;
 	Color* color; 
 
-	rgba = (Byte*)calloc(4, sizeof(Byte));
+	rgba = (int*)calloc(4, sizeof(int));
 
 	for(i = 0; i < 4; i++){
 		if(read_unite(in, &(rgba[i])) == EOF)
@@ -126,19 +127,19 @@ int read_body_color(BitFile* in, Quadtree* qt, int* total_bits){
 	*qt = create_node(NULL, 0);
 
 	if(bit == 0){
-		if(read_body_color(in, &(*qt)->sonNW, total_bits) == EOF)
-			return EOF;
-		if(read_body_color(in, &(*qt)->sonNE, total_bits) == EOF)
-			return EOF;
-		if(read_body_color(in, &(*qt)->sonSE, total_bits) == EOF)
-			return EOF;
-		if(read_body_color(in, &(*qt)->sonSW, total_bits) == EOF)
-			return EOF;
+		if(read_body_color(in, &(*qt)->sonNW, total_bits) == 0)
+			return 0;
+		if(read_body_color(in, &(*qt)->sonNE, total_bits) == 0)
+			return 0;
+		if(read_body_color(in, &(*qt)->sonSE, total_bits) == 0)
+			return 0;
+		if(read_body_color(in, &(*qt)->sonSW, total_bits) == 0)
+			return 0;
 	} else {
 		(*total_bits) -= 32;
 		pixel->color = read_color(in);
-		if(pixel->color == NULL)
-			return EOF;
+		if(NULL == pixel->color)
+			return 0;
 		(*qt)->pixel = pixel;
 	}
 	return 1;
@@ -146,24 +147,23 @@ int read_body_color(BitFile* in, Quadtree* qt, int* total_bits){
 
 int decompression(char* file_name, Quadtree* qt){
 	BitFile in;
-	int return_val_ext;
-	int total_bits;
-	int padding;
+	int return_val_ext, total_bits, padding;
 
 	assert(qt != NULL);
 	assert(file_name != NULL);
 	
-	total_bits = count_bit_file(file_name) - 3;
 	return_val_ext = extension_qt(file_name);
 	init_BitFile(&in, file_name, "r");
 	padding = read_padding(&in);
-	total_bits -= padding;
+	total_bits = count_bit_file(file_name) - 3 - padding;
 	if(return_val_ext == -1)
 		return -1;
 	if(return_val_ext == 1){
-		read_body_color(&in, qt, &total_bits);
+		if(read_body_color(&in, qt, &total_bits) == 0)
+			return 0;
 	} else {
-		read_body_B_W(&in, qt, &total_bits);
+		if(read_body_B_W(&in, qt, &total_bits) == 0)
+			return 0;
 	}
 	printf("OK\n");
 	close_BitFile(&in);

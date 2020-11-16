@@ -13,9 +13,9 @@
 #include "../include/Decompression.h"
 #include "../include/Display_qt.h"
 
-Byte* generate_rgba(){
-	Byte* rgba;
-	rgba = (Byte*)malloc(sizeof(Byte) * 4);
+int* generate_rgba(){
+	int* rgba;
+	rgba = (int*)malloc(sizeof(int) * 4);
 	if(rgba == NULL)
 		return NULL;
 	
@@ -159,19 +159,21 @@ int comp_decomp(){
 		return 0;
 	
 	printf("\tCompression... ");
-	compression(file_name, qt);
+	if(compression(file_name, qt) == 0)
+		return 0;
 	display_qt_pdf(qt);
 	MLV_wait_milliseconds(100);
 	
 	printf("\tDecompression... ");
-	decompression(file_name, &qt_decomp);	
+	if(decompression(file_name, &qt_decomp) == 0)	
+		return 0;
 	display_qt_pdf(qt_decomp);
 
 	return 1;
 }
 
 int test_Quadtree(){
-	printf("TEST QUADTREE\n");
+	printf("  TEST QUADTREE\n");
 	return 1;
 }
 

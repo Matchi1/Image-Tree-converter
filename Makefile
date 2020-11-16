@@ -20,19 +20,19 @@ Main.o: Main.c
 Color.o: Color.c Color.h
 	$(CC) -o $(BIN_PATH)$@ -c $< $(CFLAGS)
 
-Quadtree.o: Quadtree.c Quadtree.h Color.h
+Quadtree.o: Quadtree.c Quadtree.h Color.h Pixel.h
 	$(CC) -o $(BIN_PATH)$@ -c $< $(CFLAGS)
 
 Graphic.o: Graphic.c Graphic.h
 	$(CC) -o $(BIN_PATH)$@ -c $< $(CFLAGS)
 
-Test.o: Test.c Test.h Quadtree.h Graphic.h Color.h
+Test.o: Test.c Test.h Quadtree.h Color.h Compression.h Decompression.h Display_qt.h BitFile.h Graphic.h
 	$(CC) -o $(BIN_PATH)$@ -c $< $(CFLAGS)
 
-Compression.o: Compression.c Compression.h Quadtree.h 
+Compression.o: Compression.c Compression.h Quadtree.h Extension.h BitFile.h
 	$(CC) -o $(BIN_PATH)$@ -c $< $(CFLAGS)
 
-Decompression.o: Decompression.c Decompression.h  
+Decompression.o: Decompression.c Decompression.h Quadtree.h Extension.h BitFile.h Color.h 
 	$(CC) -o $(BIN_PATH)$@ -c $< $(CFLAGS)
 
 BitFile.o: BitFile.c BitFile.h  
@@ -41,19 +41,22 @@ BitFile.o: BitFile.c BitFile.h
 Menu.o: Menu.c Menu.h  
 	$(CC) -o $(BIN_PATH)$@ -c $< $(CFLAGS)
 
-Input_img.o: Input_img.c Input_img.h  
+Input_img.o: Input_img.c Input_img.h Quadtree.h 
 	$(CC) -o $(BIN_PATH)$@ -c $< $(CFLAGS)
 	
-Pixel.o: Pixel.c Pixel.h  
+Pixel.o: Pixel.c Pixel.h Color.h 
 	$(CC) -o $(BIN_PATH)$@ -c $< $(CFLAGS)
 
 Extension.o: Extension.c Extension.h  
 	$(CC) -o $(BIN_PATH)$@ -c $< $(CFLAGS)
 
-Display_qt.o: Display_qt.c Display_qt.h  
+Display_qt.o: Display_qt.c Display_qt.h Quadtree.h 
 	$(CC) -o $(BIN_PATH)$@ -c $< $(CFLAGS)
 
-Calcul.o: Calcul.c Calcul.h  
+Calcul.o: Calcul.c Calcul.h Color.h 
+	$(CC) -o $(BIN_PATH)$@ -c $< $(CFLAGS)
+
+Hashtable.o: Hashtable.c Hashtable.h Quadtree.h 
 	$(CC) -o $(BIN_PATH)$@ -c $< $(CFLAGS)
 
 clean:
