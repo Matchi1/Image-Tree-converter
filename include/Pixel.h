@@ -34,4 +34,6 @@ void init_pixel(Pixel* p, int x, int y, int length, Color* color);
  */
 void display_pixel(Pixel* p);
 
+void draw_pixel(Pixel* pixel);
+
 #endif

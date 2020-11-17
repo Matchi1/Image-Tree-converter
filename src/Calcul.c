@@ -7,39 +7,51 @@
 #include "../include/Pixel.h"
 
 int math_square(int value){
-	return value * value;
+	return ( value ) * ( value );
 }
 
 float dist(const Color* c1, const Color* c2){
 	float distance;
-	int r2, g2, b2, a2;
+	float r, g, b, a;
+	float r2, g2, b2, a2;
 
-	r2 = math_square(c1->r - c2->r);
-	g2 = math_square(c1->g - c2->g);
-	b2 = math_square(c1->b - c2->b);
-	a2 = math_square(c1->a - c2->a);
+	r = c1->r - c2->r;
+	g = c1->g - c2->g;
+	b = c1->b - c2->b;
+	a = c1->a - c2->a;
+	r2 = math_square(r);
+	g2 = math_square(g);
+	b2 = math_square(b);
+	a2 = math_square(a);
 
 	distance = sqrt(r2 + g2 + b2 + a2);
 	return distance;	
 }
 
-Color* average_color(int len_arr, Pixel* arr_pixel){
-	int i;
-	int rgba[4];
-	
-	rgba[0] = rgba[1] = rgba[2] = rgba[3] = 0;
-	for(i = 0; i < len_arr; i++){
-		rgba[0] += arr_pixel[i].color->r;
-		rgba[1] += arr_pixel[i].color->g;
-		rgba[2] += arr_pixel[i].color->b;
-		rgba[3] += arr_pixel[i].color->a;
-	}
+void average_color(MLV_Image* img, Pixel* area){
+	int i, j, div;
+	int r, g, b, a;
+	long int r_sum, g_sum, b_sum, a_sum;
+	int avr_rgba[4];
 
-	rgba[0] *= len_arr;
-	rgba[1] *= len_arr;
-	rgba[2] *= len_arr;
-	rgba[3] *= len_arr;
-	return create_color(rgba);
+	assert(area != NULL);
+	r_sum = g_sum = b_sum = a_sum = 0;
+	avr_rgba[0] = avr_rgba[1] = avr_rgba[2] = avr_rgba[3] = 0;
+	for(i = 0; i < area->length; i++){
+		for(j = 0; j < area->length; j++){
+			MLV_get_pixel_on_image(img, area->x + i, area->y + j, &r, &g, &b, &a);
+			r_sum += r;
+			g_sum += g;
+			b_sum += b;
+			a_sum += a;
+		}
+	}
+	div = area->length * area->length;
+	avr_rgba[0] = r_sum / div;
+	avr_rgba[1] = g_sum / div;
+	avr_rgba[2] = b_sum / div;
+	avr_rgba[3] = a_sum / div;
+	area->color = create_color(avr_rgba);
 }
 
 int error(MLV_Image* img, Pixel* area){
@@ -50,7 +62,8 @@ int error(MLV_Image* img, Pixel* area){
 	error = 0;
 	for(i = 0; i < area->length; i++){
 		for(j = 0; j < area->length; j++){
-			MLV_get_pixel(
+			MLV_get_pixel_on_image(
+					img,
 					area->x + i, area->y + j, 
 					&rgba[0], &rgba[1], &rgba[2], &rgba[3]
 					);

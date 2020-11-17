@@ -48,6 +48,7 @@ int is_leave(Node* node){
 
 void display_node(Node* node){
 	assert(node != NULL);
+	printf("error value: %d\n", node->error_val);
 	if(node->pixel != NULL)
 		display_pixel(node->pixel);
 }

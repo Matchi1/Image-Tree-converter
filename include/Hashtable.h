@@ -3,12 +3,16 @@
 
 #include "Quadtree.h"
 
-#define HT_MAX_LEN 500
+#define HT_MAX_LEN 1048
 
 typedef struct element {
 	Node* node;
 	struct element* next;
 } Element, *List;
+
+void init_ht(List* ht);
+
+List* create_ht();
 
 /**
  * Create a key for a node.
@@ -16,6 +20,8 @@ typedef struct element {
  * @return the key of the node.
  */
 int get_key(Node* node);
+
+void add_lst_element(List* lst, Element* new);
 
 /**
  * Add a Node to a List.
@@ -26,6 +32,10 @@ int get_key(Node* node);
  */
 int add_list_node(List* lst, Node* node);
 
+void add_ht_node(List* ht, Node* node);
+
+int remove_ht_node(List* ht, Node* node);
+
 /**
  * Remove a node from the a List
  * @parameters lst a pointor to a List.
@@ -34,5 +44,7 @@ int add_list_node(List* lst, Node* node);
  * else 0.
  */
 int remove_list_node(List* lst, Node* node);
+
+void free_ht(List* ht);
 
 #endif

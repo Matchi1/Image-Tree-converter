@@ -39,6 +39,8 @@ void init_node(Node* node, Pixel* p, int error_val);
  */
 int add_sons(Quadtree qt, int nb_sons, Node* arr_sons); 
 
+void display_node(Node* node);
+
 /**
  * Display a Quadtree.
  * @parameters: qt a Quadtree.
