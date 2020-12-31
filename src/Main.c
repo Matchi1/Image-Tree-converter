@@ -10,25 +10,54 @@
 #include "../include/Hashtable.h"
 #include "../include/Calcul.h"
 
-int main(int argc, char const *argv[]){
+void select_menu(int* choice){
+	printf("1: Test\n");
+	printf("2: Produce Quadtree for B&W image\n");
+	printf("3: Produce Quadtree for Colorful image\n");
+	scanf("%d", choice);
+}
+
+void presentation(int opt){
 	Quadtree qt;
 	MLV_Image* img;
 	char* file_name = "img/img1.jpg";
-
 	MLV_create_window("Pixel", "Pixel", MAXPIXEL, MAXPIXEL);
 
 	qt = NULL;
 	img = MLV_load_image(file_name);
+	if(img == NULL){
+		fprintf(stderr, "Image not found !!!\n");
+		return;
+	}
 	MLV_resize_image(img, MAXPIXEL, MAXPIXEL);
 	MLV_draw_image(img, 0, 0);
 
 	MLV_actualise_window();
 	MLV_wait_seconds(2);
+
 	MLV_clear_window(MLV_COLOR_BLACK);
 	MLV_actualise_window();
-	convert_img_qt(img, &qt);
+	convert_img_qt(img, &qt, opt);
 	
 	MLV_wait_seconds(1);
 	MLV_free_window();
+}
+
+void basic_menu(int choice){
+	switch(choice){
+		case 1:
+			test(); break;
+		case 2:
+			presentation(1); break;
+		default:
+			presentation(0); break;
+	}
+}
+
+int main(int argc, char const *argv[]){
+	int choice;
+
+	select_menu(&choice);
+	basic_menu(choice);
 	return 0;
 }

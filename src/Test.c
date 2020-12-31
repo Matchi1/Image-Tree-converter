@@ -26,16 +26,16 @@ int* generate_rgba(){
 	return rgba;
 }
 
-Color* generate_color(int len_color){
-	Color* arr_color;
+int** generate_color(int nb_colors){
+	int** arr_color;
 	int i;
 
-	arr_color = (Color*)malloc(sizeof(Color) * len_color);
+	arr_color = (int**)malloc(sizeof(int*) * nb_colors);
 	if(arr_color == NULL)
 		return NULL;
 	
-	for(i = 0; i < len_color; i++){
-		init_color(&arr_color[i], generate_rgba());
+	for(i = 0; i < nb_colors; i++){
+		arr_color[i] = generate_rgba();
 	}
 	return arr_color;
 }
@@ -57,7 +57,7 @@ Node* generate_node(int nb_node, Pixel* pixel){
 Pixel* generate_pixel(int nb_pixel){
 	int x, y, length, i;
 	Pixel* arr_pixel;
-	Color* color;
+	int* color;
 	
 	arr_pixel = (Pixel*)malloc(sizeof(Pixel) * nb_pixel);
 	if(arr_pixel == NULL)
@@ -67,7 +67,7 @@ Pixel* generate_pixel(int nb_pixel){
 		x = rand() % MAXPIXEL;
 		y = rand() % MAXPIXEL;
 		length = rand() % MAXPIXEL;
-		color = generate_color(1);
+		color = *generate_color(1);
 		init_pixel(&(arr_pixel[i]), x, y, length, color);
 	}
 	return arr_pixel;
@@ -132,10 +132,9 @@ int test_read_write_BitFile(){
 	init_BitFile(&out, file_name, "w");
 
 	if(arr_bit == NULL){
-		printf("Pas assez d'espace mémoire\n");
+		printf("Not enough memory space\n");
 		return 0;
 	}
-	
 	generate_File(&out, 10, arr_bit);
 	init_BitFile(&in, file_name, "r");
 
@@ -149,7 +148,7 @@ int test_read_write_BitFile(){
 int comp_decomp(){
 	Quadtree qt;
 	Quadtree qt_decomp;
-	char file_name[] = "test/test.qtc";
+	char file_name[] = "test/test.qtn";
 	
 	srand(time(NULL));
 	generate_qt(&qt);

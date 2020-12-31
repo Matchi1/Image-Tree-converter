@@ -6,12 +6,6 @@
 #include "../include/Compression.h"
 #include "../include/BitFile.h"
 
-int is_white(Color* color){
-	if(color->r == 255 && color->g == 255 && color->b == 255 && color->a == 255)
-		return 1;
-	return 0;
-}
-
 void count_bit(Quadtree qt, int* len_bits, int display_color){
 	assert(len_bits != NULL);
 
@@ -48,11 +42,8 @@ int write_padding(BitFile* out, int padding){
 	return 1;
 }
 
-void write_B_W(BitFile* out, Node* node){
-	if(!is_white(node->pixel->color))
-		write_BitFile(out, 0);
-	else 
-		write_BitFile(out, 1);
+void write_B_W(BitFile* out, int* color){
+	write_BitFile(out, black_or_white(color));
 }
 
 void write_unite(BitFile* out, int unite){
@@ -69,50 +60,35 @@ void write_unite(BitFile* out, int unite){
 	}
 }
 
-void write_color(BitFile* out, Color* color){
-	write_unite(out, color->r);
-	write_unite(out, color->g);
-	write_unite(out, color->b);
-	write_unite(out, color->a);
-}
+void write_rgba(BitFile* out, int* color){
+	int i;
 
-void prefix_B_W(BitFile* out, Quadtree qt){
-	if(is_leave(qt) == 1){
-		write_BitFile(out, 1);
-		write_B_W(out, qt);
-	} else {
-		write_BitFile(out, 0);
-		prefix_B_W(out, qt->sonNW);
-		prefix_B_W(out, qt->sonNE);
-		prefix_B_W(out, qt->sonSE);
-		prefix_B_W(out, qt->sonSW);
+	for(i = 0; i < 4; i++){
+		write_unite(out, color[i]);
 	}
 }
 
-void prefix_color(BitFile* out, Quadtree qt){
+void prefix(BitFile* out, Quadtree qt, void (*write_color)(BitFile* out, int* color)){
 	if(is_leave(qt) == 1){
 		write_BitFile(out, 1);
 		write_color(out, qt->pixel->color);
 	} else {
 		write_BitFile(out, 0);
-		prefix_color(out, qt->sonNW);
-		prefix_color(out, qt->sonNE);
-		prefix_color(out, qt->sonSE);
-		prefix_color(out, qt->sonSW);
+		prefix(out, qt->sonNW, write_color);
+		prefix(out, qt->sonNE, write_color);
+		prefix(out, qt->sonSE, write_color);
+		prefix(out, qt->sonSW, write_color);
 	}
 }
 
 int compression(char* file_name, Quadtree qt){
 	BitFile out;
-	int return_val_ext;
-	int nb_bits;
-	int padding;
+	int return_val_ext, nb_bits, padding;
 
 	assert(file_name != NULL);
 	if(is_empty(qt))
 		return 0;
 	
-	nb_bits = 0;
 	return_val_ext = extension_qt(file_name);
 	count_bit(qt, &nb_bits, return_val_ext);
 	padding = (nb_bits + 3) % 8; 
@@ -121,17 +97,14 @@ int compression(char* file_name, Quadtree qt){
 	if(return_val_ext == -1){
 		printf("Fichier non reconnue.\n");
 		return 0;
-	} else if(return_val_ext == 0){
-		write_padding(&out, padding);
-		prefix_B_W(&out, qt);
+	}
+	write_padding(&out, padding);
+	if(return_val_ext == 0){
+		prefix(&out, qt, write_rgba);
 	} else {
-		write_padding(&out, padding);
-		prefix_color(&out, qt);
+		prefix(&out, qt, write_B_W);
 	}
 	printf("OK\n");
 	close_BitFile(&out);
 	return 1;
 }
-
-
-

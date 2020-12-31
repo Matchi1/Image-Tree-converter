@@ -12,17 +12,16 @@ void write_beginning(FILE *f){
 
 void write_qt(FILE *f, Quadtree qt){
 	Pixel* pixel;
-	Color* color;
+	int* color;
 
 	pixel = qt->pixel;
-	if(pixel != NULL)
+	if(NULL != pixel)
 		color = pixel->color;
 
-	printf("hello\n");
     if(NULL != qt){
 		if(NULL != pixel && NULL != color)
 			fprintf(f, "    n%p [label=\"<sonNW> | <sonNE> | <x> %d | <y> %d | <error_val> %d | <r> %d | <g> %d | <b> %d | <a> %d | <sonSE> | <sonSW>\"]\n", 
-				(void*)qt, pixel->x, pixel->y, qt->error_val, color->r, color->g, color->b, color->a);
+				(void*)qt, pixel->x, pixel->y, qt->error_val, color[0], color[1], color[2], color[3]);
 		else if(pixel != NULL && color == NULL) 
 			fprintf(f, "    n%p [label=\"<sonNW> | <sonNE> | <x> %d | <y> %d | <error_val> %d | <r> | <g> | <b> | <a> | <sonSE> | <sonSW>\"]\n", 
 				(void*)qt, pixel->x, pixel->y, qt->error_val);
@@ -39,8 +38,6 @@ void write_qt(FILE *f, Quadtree qt){
             write_qt(f, qt->sonSE);
             fprintf(f, "    n%p:sonSW:c -> n%p:r;\n", (void*)qt, (void*)qt->sonSW);
             write_qt(f, qt->sonSW);
-        } else {
-			display_pixel(pixel);
 		}
     } else {
 		printf("A node is NULL.\n");

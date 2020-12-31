@@ -4,10 +4,10 @@
 #include "Color.h"
 #include "Pixel.h"
 
-float dist(const Color* c1, const Color* c2);
+float dist(const int* c1, const int* c2);
 
-int error(MLV_Image* img, Pixel* area);
+int error(MLV_Image* img, Pixel* area, int bw);
 
-void average_color(MLV_Image* img, Pixel* area);
+void average_color(MLV_Image* img, Pixel* area, int bw);
 
 #endif

@@ -4,35 +4,57 @@
 #include <MLV/MLV_all.h>
 #include "../include/Color.h"
 
-Color* create_color(int* rgba){
-	Color* color;
-
-	color = (Color*)malloc(sizeof(Color));
-	if(color == NULL)
-		return NULL;
-	init_color(color, rgba);
-	return color;
+void init_color(int* rgba, int r, int g, int b, int a){
+	rgba[0] = r;
+	rgba[1] = g;
+	rgba[2] = b;
+	rgba[3] = a;
 }
 
-void init_color(Color* color, int* rgba){
+void init_color_BW(int* color, int bw){
 	assert(color != NULL);
-	color->r = rgba[0];
-	color->g = rgba[1];
-	color->b = rgba[2];
-	color->a = rgba[3];
+	if(bw == 1)
+		init_color(color, 255, 255, 255, color[3]);
+	else
+		init_color(color, 0, 0, 0, color[3]);
 }
 
-void display_color(Color* color){
+int* create_color(int r, int g, int b, int a){
+	int* rgba;	
+
+	rgba = (int*)malloc(sizeof(int)*4);
+	if(rgba == NULL)
+		return NULL;
+	init_color(rgba, r, g, b, a);
+	return rgba;
+}
+
+void display_color(int* color){
 	if(color != NULL){
-		printf("Red : %d\n", color->r);
-		printf("Green : %d\n", color->g);
-		printf("Blue : %d\n", color->b);
-		printf("Alpha : %d\n", color->a);
+		printf("Red : %d\n", color[0]);
+		printf("Green : %d\n", color[1]);
+		printf("Blue : %d\n", color[2]);
+		printf("Alpha : %d\n", color[3]);
 	}
 }
 
-int verify_color(Color* c1, Color* c2){
-	if(c1->r != c2->r || c1->g != c2->g || c1->b != c2->b || c1->a != c2->a)
+int verify_color(int* c1, int* c2){
+	int i;
+	for(i = 0; i < 4; i++){
+		if(c1[i] != c2[i])
+			return 0;
+	}
+	return 1;
+}
+
+int black_or_white(int* color){
+	float avr_gray = 0.2126*color[0] + 0.7152*color[1] + 0.0722*color[2];
+	printf("average gray : %f\n", avr_gray);
+	if(avr_gray > 128)
 		return 0;
 	return 1;
+}
+
+void convert_rgba_to_BW(int* color){
+	init_color_BW(color, black_or_white(color));
 }

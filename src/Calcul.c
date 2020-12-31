@@ -10,33 +10,31 @@ int math_square(int value){
 	return ( value ) * ( value );
 }
 
-float dist(const Color* c1, const Color* c2){
+float dist(const int* c1, const int* c2){
 	float distance;
 	float r, g, b, a;
-	float r2, g2, b2, a2;
 
-	r = c1->r - c2->r;
-	g = c1->g - c2->g;
-	b = c1->b - c2->b;
-	a = c1->a - c2->a;
-	r2 = math_square(r);
-	g2 = math_square(g);
-	b2 = math_square(b);
-	a2 = math_square(a);
+	r = math_square(c1[0] - c2[0]);
+	g = math_square(c1[1] - c2[1]);
+	b = math_square(c1[2] - c2[2]);
+	a = math_square(c1[3] - c2[3]);
 
-	distance = sqrt(r2 + g2 + b2 + a2);
+	distance = sqrt(r + g + b + a);
 	return distance;	
 }
 
-void average_color(MLV_Image* img, Pixel* area){
-	int i, j, div;
+void average_color(MLV_Image* img, Pixel* area, int bw){
+	int i, j, nb_pixel;
 	int r, g, b, a;
 	long int r_sum, g_sum, b_sum, a_sum;
-	int avr_rgba[4];
+	int* avr_rgba;
 
 	assert(area != NULL);
+	avr_rgba = create_color(0, 0, 0, 0);
 	r_sum = g_sum = b_sum = a_sum = 0;
-	avr_rgba[0] = avr_rgba[1] = avr_rgba[2] = avr_rgba[3] = 0;
+	nb_pixel = area->length * area->length;
+
+	/* Add all color into their corresponding color unite (red, green, blue and alpha)*/
 	for(i = 0; i < area->length; i++){
 		for(j = 0; j < area->length; j++){
 			MLV_get_pixel_on_image(img, area->x + i, area->y + j, &r, &g, &b, &a);
@@ -46,18 +44,15 @@ void average_color(MLV_Image* img, Pixel* area){
 			a_sum += a;
 		}
 	}
-	div = area->length * area->length;
-	avr_rgba[0] = r_sum / div;
-	avr_rgba[1] = g_sum / div;
-	avr_rgba[2] = b_sum / div;
-	avr_rgba[3] = a_sum / div;
-	area->color = create_color(avr_rgba);
+	init_color(avr_rgba, r_sum / nb_pixel, g_sum / nb_pixel, b_sum / nb_pixel, a_sum / nb_pixel);
+	if(bw == 1)
+		convert_rgba_to_BW(avr_rgba);
+	area->color = avr_rgba;
 }
 
-int error(MLV_Image* img, Pixel* area){
+int error(MLV_Image* img, Pixel* area, int bw){
 	int i, j, error;
 	int rgba[4];
-	Color color;
 	
 	error = 0;
 	for(i = 0; i < area->length; i++){
@@ -67,8 +62,9 @@ int error(MLV_Image* img, Pixel* area){
 					area->x + i, area->y + j, 
 					&rgba[0], &rgba[1], &rgba[2], &rgba[3]
 					);
-			init_color(&color, rgba);
-			error += dist(&color, area->color);	
+			if(bw == 1)
+				convert_rgba_to_BW(rgba);
+			error += dist(rgba, area->color);	
 		}
 	}
 	return error;

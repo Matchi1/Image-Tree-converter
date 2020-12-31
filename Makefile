@@ -1,11 +1,12 @@
 CC = gcc
 CFLAGS = -pedantic -Wall -ansi
-LDFLAGS = -lMLV -lm
+LDFLAGS = -lMLV -lm -O2
 SRC_PATH = src/
 BIN_PATH = bin/
 LDLIBS = $(subst .c,.o,$(notdir $(wildcard $(SRC_PATH)*)))
 LDLIBS_PATH = $(addprefix $(BIN_PATH),$(LDLIBS))
 EXEC = Main
+current_dir=$(notdir $(shell pwd))
 
 vpath %.o bin
 vpath %.c src
@@ -60,7 +61,11 @@ Hashtable.o: Hashtable.c Hashtable.h Quadtree.h
 	$(CC) -o $(BIN_PATH)$@ -c $< $(CFLAGS)
 
 clean:
+	rm -f tmp.*
 	rm -f $(BIN_PATH)*.o
 
 mrproper: clean
 	rm -f $(EXEC)
+
+zip:
+	cd ..; zip -FSr $(current_dir) $(current_dir) -x $(current_dir)/.\*
