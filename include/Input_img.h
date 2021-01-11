@@ -10,6 +10,6 @@
  * 			   qt a pointor to a Quadtree.
  * @return 1 if the conversion was successeful else 0.
  */
-int convert_img_qt(MLV_Image* img, Quadtree* qt, int bw);
+int convert_img_qt(MLV_Image* img, Quadtree* qt);
 
 #endif

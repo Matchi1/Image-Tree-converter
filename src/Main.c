@@ -9,6 +9,10 @@
 #include "../include/Input_img.h"
 #include "../include/Hashtable.h"
 #include "../include/Calcul.h"
+#include "../include/Menu.h"
+#include "../include/Buttons.h"
+#include "../include/Actions.h"
+#include "../include/Image.h"
 
 void select_menu(int* choice){
 	printf("1: Test\n");
@@ -17,7 +21,7 @@ void select_menu(int* choice){
 	scanf("%d", choice);
 }
 
-void presentation(int opt){
+void presentation(){
 	Quadtree qt;
 	MLV_Image* img;
 	char* file_name = "img/img1.jpg";
@@ -37,7 +41,7 @@ void presentation(int opt){
 
 	MLV_clear_window(MLV_COLOR_BLACK);
 	MLV_actualise_window();
-	convert_img_qt(img, &qt, opt);
+	convert_img_qt(img, &qt);
 	
 	MLV_wait_seconds(1);
 	MLV_free_window();
@@ -48,16 +52,25 @@ void basic_menu(int choice){
 		case 1:
 			test(); break;
 		case 2:
-			presentation(1); break;
+			presentation(); break;
 		default:
-			presentation(0); break;
+			presentation(); break;
 	}
 }
 
 int main(int argc, char const *argv[]){
-	int choice;
+	Action action;
+	Quadtree qt;
+	Image info;
 
-	select_menu(&choice);
-	basic_menu(choice);
+	MLV_create_window("Pixel", "Pixel", MAX_SCREEN_X, MAX_SCREEN_Y);
+
+	action = NONE;
+	while(action != QUIT){
+		action = menu(MAX_SCREEN_X, MAX_SCREEN_Y);
+		choice(action, &info, &qt);
+	}
+
+	MLV_free_window();
 	return 0;
 }

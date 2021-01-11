@@ -60,6 +60,15 @@ Calcul.o: Calcul.c Calcul.h Color.h
 Hashtable.o: Hashtable.c Hashtable.h Quadtree.h 
 	$(CC) -o $(BIN_PATH)$@ -c $< $(CFLAGS)
 
+Buttons.o: Buttons.c Buttons.h  
+	$(CC) -o $(BIN_PATH)$@ -c $< $(CFLAGS)
+
+Actions.o: Actions.c Actions.h  
+	$(CC) -o $(BIN_PATH)$@ -c $< $(CFLAGS)
+
+Image.o: Image.c Image.h  
+	$(CC) -o $(BIN_PATH)$@ -c $< $(CFLAGS)
+	
 clean:
 	rm -f tmp.*
 	rm -f $(BIN_PATH)*.o

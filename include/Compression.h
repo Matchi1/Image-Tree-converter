@@ -16,11 +16,11 @@ int compression(char* file_name, Quadtree qt);
  * compression.
  * @argument qt a Quadtree
  *           len_bits a pointor containing the number of bits
- *           display_color number representing the format of compression
+ *           display_bw number representing the format of compression
  *           (compression for colored image or black & white image)
  * @return void
  */
-void count_bit(Quadtree qt, int* len_bits, int display_color);
+void count_bit(Quadtree qt, int* len_bits, const int* display_bw);
 
 /**
  * Write the specified padding into a file contained in BitFile

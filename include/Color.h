@@ -50,4 +50,6 @@ void convert_rgba_to_BW(int* color);
 
 int black_or_white(int* color);
 
+void free_color(int* color);
+
 #endif

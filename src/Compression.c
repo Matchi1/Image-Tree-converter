@@ -6,38 +6,37 @@
 #include "../include/Compression.h"
 #include "../include/BitFile.h"
 
-void count_bit(Quadtree qt, int* len_bits, int display_color){
+void count_bit(Quadtree qt, int* len_bits, const int* display_bw){
 	assert(len_bits != NULL);
 
 	(*len_bits)++;
 
 	if(is_leave(qt)){
-		if(display_color == 0)
+		if(*display_bw == 1)
 			(*len_bits)++;
 		else 
 			(*len_bits) += 32;
 	} else { 
-		count_bit(qt->sonNW, len_bits, display_color);
-		count_bit(qt->sonNE, len_bits, display_color);
-		count_bit(qt->sonSE, len_bits, display_color);
-		count_bit(qt->sonSW, len_bits, display_color);
+		count_bit(qt->sonNW, len_bits, display_bw);
+		count_bit(qt->sonNE, len_bits, display_bw);
+		count_bit(qt->sonSE, len_bits, display_bw);
+		count_bit(qt->sonSW, len_bits, display_bw);
 	}
 }
 
 int write_padding(BitFile* out, int padding){
-	int mask, bit;
-	int i;
+	int mask, i;
 
 	if(padding > 7){
 		printf("Erreur: padding trop grand.\n");
 		return 0;
 	}
 	for(i = 2; i >= 0; i--){
-		bit = 0;
 		mask = 1 << i;
 		if((padding & mask) != 0)
-			bit = 1;
-		write_BitFile(out, bit);
+			write_BitFile(out, 1);
+		else
+			write_BitFile(out, 0);
 	}
 	return 1;
 }
@@ -47,16 +46,14 @@ void write_B_W(BitFile* out, int* color){
 }
 
 void write_unite(BitFile* out, int unite){
-	int i;
-	int bit;
-	int mask;
+	int i, mask;
 
 	for(i = 7; i >= 0; i--){
-		bit = 0;
 		mask = 1 << i;
 		if((unite & mask) != 0)
-			bit = 1;
-		write_BitFile(out, bit);
+			write_BitFile(out, 1);
+		else
+			write_BitFile(out, 0);
 	}
 }
 
@@ -88,9 +85,10 @@ int compression(char* file_name, Quadtree qt){
 	assert(file_name != NULL);
 	if(is_empty(qt))
 		return 0;
-	
+
+	nb_bits = 0;
 	return_val_ext = extension_qt(file_name);
-	count_bit(qt, &nb_bits, return_val_ext);
+	count_bit(qt, &nb_bits, &return_val_ext);
 	padding = (nb_bits + 3) % 8; 
 	init_BitFile(&out, file_name, "w");
 	
@@ -99,12 +97,10 @@ int compression(char* file_name, Quadtree qt){
 		return 0;
 	}
 	write_padding(&out, padding);
-	if(return_val_ext == 0){
+	if(return_val_ext == 0)
 		prefix(&out, qt, write_rgba);
-	} else {
+	else 
 		prefix(&out, qt, write_B_W);
-	}
-	printf("OK\n");
 	close_BitFile(&out);
 	return 1;
 }

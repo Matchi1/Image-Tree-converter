@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <MLV/MLV_all.h>
 #include "../include/Pixel.h"
+#include "../include/Graphic.h"
 
 Pixel* create_pixel(int x, int y, int length, int* color){
 	Pixel* pixel;
@@ -26,9 +27,13 @@ void init_pixel(Pixel* p, int x, int y, int length, int* color){
 void draw_pixel(Pixel* pixel){
 	MLV_Color color;
 	int* c = pixel->color;
+	int origin_x, origin_y;
+
+	origin_x = (MAX_SCREEN_X - MAXPIXEL) / 2;
+	origin_y = (MAX_SCREEN_Y - MAXPIXEL) / 2;
 	color = MLV_convert_rgba_to_color(c[0], c[1], c[2], c[3]);
 	MLV_draw_filled_rectangle(
-			pixel->x, pixel->y,
+			pixel->x + origin_x, pixel->y + origin_y,
 			pixel->length, pixel->length,
 			color
 			);
@@ -39,4 +44,10 @@ void display_pixel(Pixel* p){
 	printf("y : %d\n", p->y);
 	printf("length : %d\n", p->length);
 	display_color(p->color);
+}
+
+void free_pixel(Pixel* p){
+	free_color(p->color);
+	free(p);
+	p = NULL;
 }

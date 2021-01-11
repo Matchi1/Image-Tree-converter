@@ -6,8 +6,8 @@
 
 float dist(const int* c1, const int* c2);
 
-int error(MLV_Image* img, Pixel* area, int bw);
+int error(MLV_Image* img, Pixel* area);
 
-void average_color(MLV_Image* img, Pixel* area, int bw);
+void average_color(MLV_Image* img, Pixel* area);
 
 #endif

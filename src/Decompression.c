@@ -14,7 +14,6 @@ int count_bit_file(char* file_name){
 
 	file = fopen(file_name, "r");
 	bits = 0;
-	fseek(file, 0, SEEK_SET);
 	while(fgetc(file) != EOF)
 		bits += 8;
 	fclose(file);
@@ -52,7 +51,7 @@ int read_unite(BitFile* in, int* unite){
 		if(bit == 1)
 			*unite += pow(2, i);
 		else if(bit == EOF)
-			return 0;
+			return EOF;
 	}
 	return 1;
 }
@@ -75,15 +74,12 @@ int read_body(BitFile* in, Quadtree* qt, int* total_bits, int* (*read_color)(Bit
 	int bit;
 	assert(qt != NULL);	
 	
-	if(*total_bits == 0){
-		close_BitFile(in);
+	if(*total_bits == 0)
 		return 1;
-	}
-	
 	pixel = create_pixel(0, 0, 1, NULL);
+	*qt = create_node(NULL, 0);
 	(*total_bits)--;
 	bit = read_BitFile(in);
-	*qt = create_node(NULL, 0);
 
 	if(bit == 0){
 		if(read_body(in, &(*qt)->sonNW, total_bits, read_color) == 0)
@@ -95,10 +91,15 @@ int read_body(BitFile* in, Quadtree* qt, int* total_bits, int* (*read_color)(Bit
 		if(read_body(in, &(*qt)->sonSW, total_bits, read_color) == 0)
 			return 0;
 	} else {
-		(*total_bits) -= 32;
+		if(read_color == read_B_W)
+			(*total_bits)--;
+		else
+			(*total_bits) -= 32;
 		pixel->color = read_color(in);
-		if(NULL == pixel->color)
+		if(NULL == pixel->color){
+			printf("Not enough memory space\n");
 			return 0;
+		}
 		(*qt)->pixel = pixel;
 	}
 	return 1;
@@ -124,7 +125,6 @@ int decompression(char* file_name, Quadtree* qt){
 		if(read_body(&in, qt, &total_bits, read_B_W) == 0)
 			return 0;
 	}
-	printf("OK\n");
 	close_BitFile(&in);
 	return 1;
 }

@@ -46,6 +46,18 @@ int is_leave(Node* node){
 	return 0;
 }
 
+void free_quadtree(Quadtree* qt){
+	if(*qt != NULL){
+		free_quadtree(&((*qt)->sonNW));
+		free_quadtree(&((*qt)->sonNE));
+		free_quadtree(&((*qt)->sonSE));
+		free_quadtree(&((*qt)->sonSW));
+		free_pixel((*qt)->pixel);
+		free(*qt);
+		*qt = NULL;
+	}
+}	
+
 void display_node(Node* node){
 	assert(node != NULL);
 	printf("error value: %d\n", node->error_val);

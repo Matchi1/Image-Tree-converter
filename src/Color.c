@@ -49,7 +49,6 @@ int verify_color(int* c1, int* c2){
 
 int black_or_white(int* color){
 	float avr_gray = 0.2126*color[0] + 0.7152*color[1] + 0.0722*color[2];
-	printf("average gray : %f\n", avr_gray);
 	if(avr_gray > 128)
 		return 0;
 	return 1;
@@ -57,4 +56,9 @@ int black_or_white(int* color){
 
 void convert_rgba_to_BW(int* color){
 	init_color_BW(color, black_or_white(color));
+}
+
+void free_color(int* color){
+	free(color);
+	color = NULL;
 }

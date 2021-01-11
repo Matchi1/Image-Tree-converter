@@ -17,4 +17,6 @@ int extension_qt(char* file_name);
  */
 int extension_min(char* file_name);
 
+char* extension_save_file(char* file_name, int bool_color);
+
 #endif

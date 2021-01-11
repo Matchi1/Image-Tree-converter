@@ -36,4 +36,6 @@ void display_pixel(Pixel* p);
 
 void draw_pixel(Pixel* pixel);
 
+void free_pixel(Pixel* p);
+
 #endif

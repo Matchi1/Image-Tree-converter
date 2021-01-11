@@ -62,4 +62,6 @@ int is_leave(Node* node);
  */
 int is_empty(Quadtree qt);
 
+void free_quadtree(Quadtree* qt);
+
 #endif
