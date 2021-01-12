@@ -20,7 +20,7 @@ int compression(char* file_name, Quadtree qt);
  *           (compression for colored image or black & white image)
  * @return void
  */
-void count_bit(Quadtree qt, int* len_bits, const int* display_bw);
+void count_bit(Quadtree qt, int* len_bits, int display_color);
 
 /**
  * Write the specified padding into a file contained in BitFile

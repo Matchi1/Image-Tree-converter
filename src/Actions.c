@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <MLV/MLV_all.h>
+#include "../include/Minimisation.h"
 #include "../include/Compression.h"
 #include "../include/Decompression.h"
 #include "../include/Input_img.h"
@@ -32,14 +33,10 @@ void draw_center_image(MLV_Image* img){
 }
 
 void convert(Image* info, Quadtree* qt){
-	int x, y;
-	
-	x = (MAX_SCREEN_X - MAXPIXEL) / 2;
-	y = (MAX_SCREEN_Y - MAXPIXEL) / 2;
 	if(extension_qt(info->file_name) != -1){
 		decompression(info->file_name, qt);
 		MLV_clear_window(MLV_COLOR_BLACK);
-		graphic_quadtree(x, y, MAXPIXEL, *qt);
+		graphic_quadtree(0, 0, MAXPIXEL, *qt);
 		MLV_wait_seconds(2);
 	} else 
 		convert_img_qt(info->img, qt);
@@ -72,6 +69,10 @@ void save_bw(Image* info, Quadtree qt){
 	compression(path_save, qt);
 }
 
+void minimize(Quadtree* qt){
+	minimisation(qt);
+}
+
 void choice(Action action, Image* info, Quadtree* qt){
 	switch(action){
 		case SELECT:
@@ -83,6 +84,9 @@ void choice(Action action, Image* info, Quadtree* qt){
 			break;
 		case SAVE_N: 
 			save_bw(info, *qt);
+			break;
+		case MINIMI: 
+			minimize(qt);
 			break;
 
 		default: break;

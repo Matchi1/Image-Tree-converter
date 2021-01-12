@@ -58,7 +58,7 @@ void basic_menu(int choice){
 	}
 }
 
-int main(int argc, char const *argv[]){
+void code(){
 	Action action;
 	Quadtree qt;
 	Image info;
@@ -72,5 +72,9 @@ int main(int argc, char const *argv[]){
 	}
 
 	MLV_free_window();
+}
+
+int main(int argc, char const *argv[]){
+	code();
 	return 0;
 }

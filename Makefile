@@ -68,6 +68,9 @@ Actions.o: Actions.c Actions.h
 
 Image.o: Image.c Image.h  
 	$(CC) -o $(BIN_PATH)$@ -c $< $(CFLAGS)
+
+Minimisation.o: Minimisation.c Minimisation.h  
+	$(CC) -o $(BIN_PATH)$@ -c $< $(CFLAGS)
 	
 clean:
 	rm -f tmp.*

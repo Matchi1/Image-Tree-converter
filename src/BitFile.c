@@ -40,7 +40,7 @@ int buffer_full(BitFile* f){
 }
 
 int read_BitFile(BitFile* in){
-	char n;
+	int n;
 	if(in->nb_bit == 0){
 		n = fgetc(in->file);	
 		if(n == EOF)
@@ -52,12 +52,13 @@ int read_BitFile(BitFile* in){
 	return (in->buf >> in->nb_bit) & 1;
 }
 
-void write_BitFile(BitFile* out, int bit){
-
+int write_BitFile(BitFile* out, int bit){
+	int return_value = 1;
 	if(buffer_full(out)){
 		out->nb_bit = 0;
-		fputc(out->buf, out->file);
+		return_value = fputc(out->buf, out->file);
 	}
 	out->nb_bit++;
 	out->buf = (out->buf << 1) | bit;
+	return return_value;
 }

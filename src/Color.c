@@ -54,6 +54,17 @@ int black_or_white(int* color){
 	return 1;
 }
 
+int color_equals(int* c1, int* c2){
+	int i;
+	if(c1 == NULL || c2 == NULL)
+		return 0;
+	for(i = 0; i < 4; i++){
+		if(c1[i] != c2[i])
+			return 0;
+	}
+	return 1;
+}
+
 void convert_rgba_to_BW(int* color){
 	init_color_BW(color, black_or_white(color));
 }

@@ -148,7 +148,7 @@ int test_read_write_BitFile(){
 int comp_decomp(){
 	Quadtree qt;
 	Quadtree qt_decomp;
-	char file_name[] = "test/test.qtn";
+	char file_name[] = "test/test.qtc";
 	
 	srand(time(NULL));
 	generate_qt(&qt);
@@ -161,7 +161,7 @@ int comp_decomp(){
 	if(compression(file_name, qt) == 0)
 		return 0;
 	display_qt_pdf(qt);
-	MLV_wait_milliseconds(100);
+	MLV_wait_seconds(5);
 	
 	printf("\tDecompression... ");
 	if(decompression(file_name, &qt_decomp) == 0)	

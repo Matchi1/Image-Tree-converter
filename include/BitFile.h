@@ -4,7 +4,7 @@
 typedef struct {
 	FILE* file;
 	int nb_bit;
-	char buf;
+	unsigned char buf;
 }BitFile;
 
 /**
@@ -38,6 +38,6 @@ int read_BitFile(BitFile* in);
  * Write the buffer into the file contained in out.
  * @return 1 if executed correctly else 0.
  */ 
-void write_BitFile(BitFile* out, int bit);
+int write_BitFile(BitFile* out, int bit);
 
 #endif

@@ -7,11 +7,7 @@
 #include "../include/Buttons.h"
 
 void graphic_quadtree(int origin_x, int origin_y, int length, Quadtree qt){
-	int new_length;
-	if(length > 1)
-		new_length = length / 2;
-	else
-		new_length = length;
+	int	new_length = length / 2;
 	if(is_leave(qt)){
 		init_pixel(qt->pixel, origin_x, origin_y, length, qt->pixel->color);	
 		draw_pixel(qt->pixel);

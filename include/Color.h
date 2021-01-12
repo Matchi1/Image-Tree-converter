@@ -52,4 +52,6 @@ int black_or_white(int* color);
 
 void free_color(int* color);
 
+int color_equals(int* c1, int* c2);
+
 #endif
