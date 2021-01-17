@@ -2,7 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include "../include/Display_qt.h"
-
+/**
+ * write the beginning of the .dot file
+ * @param f a pointor to a FILE structure
+ */
 void write_beginning(FILE *f){
     fprintf(f, "digraph arbre {\n");
     fprintf(f, "    node [shape=record, height=.1]\n");
@@ -10,6 +13,11 @@ void write_beginning(FILE *f){
     fprintf(f, "\n");
 }
 
+/**
+ * Write a Quadtree structure into a .dot file
+ * @param f a pointor a FILE structure
+ * 		  qt a Quadtree structure
+ */
 void write_qt(FILE *f, Quadtree qt){
 	Pixel* pixel;
 	int* color;
@@ -44,16 +52,32 @@ void write_qt(FILE *f, Quadtree qt){
 	}
 }
 
+/**
+ * Write the end of a .dot file
+ * @param f a pointor to a FILE structure
+ */
 void write_end(FILE *f){
     fprintf(f, "}");
 }
 
+/**
+ * Represent a Quadtree structure into a .dot file
+ * @param f a pointor to a FILE structure
+ * 		  qt a Quadtree structure
+ */
 void draw(FILE* f, Quadtree qt){
     write_beginning(f);
     write_qt(f, qt);
     write_end(f);
 }
 
+/**
+ * Create a pdf depending on a .dot file
+ * @param dot the name of the .dot file
+ * 		  pdf the name of the .pdf file
+ *		  qt a Quadtree structure
+ * @return 0 if an error occurred else 1
+ */
 int create_PDF(char* dot, char* pdf, Quadtree qt){
     int len;
     char* cmd;
@@ -75,13 +99,19 @@ int create_PDF(char* dot, char* pdf, Quadtree qt){
     return 1;
 }
 
-void display_qt_pdf(Quadtree qt){
-    char* pdf;
+/**
+ * Display a Quadtree structure into a .pdf file
+ * @param qt a Quadtree structure
+ */
+void display_qt_pdf(Quadtree qt, char* pdf){
+	char command[50];
     char* dot;
 
-    pdf = "tmp.pdf";
     dot = "tmp.dot";
+	strcpy(command, "evince ");
+	strcat(command, pdf);
+	strcat(command, " &");
 
     create_PDF(dot, pdf, qt);
-    system("evince tmp.pdf &");
+    system(command);
 }

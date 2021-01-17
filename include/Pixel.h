@@ -34,8 +34,16 @@ void init_pixel(Pixel* p, int x, int y, int length, int* color);
  */
 void display_pixel(Pixel* p);
 
+/**
+ * Draw a pixel into an MLV window
+ * @param pixel a pointor to a Pixel structure
+ */
 void draw_pixel(Pixel* pixel);
 
+/**
+ * Free a Pixel structure
+ * @param p a pointor to a Pixel structure
+ */
 void free_pixel(Pixel* p);
 
 #endif

@@ -1,24 +1,23 @@
 #include <stdio.h>
 #include "../include/Buttons.h"
 
-void init_button(Button* b, int x, int y, int length_x, int length_y, int bool_press, Action act, char* text, MLV_Color color){
+void init_button(Button* b, int x, int y, int length_x, int length_y, Action act, char* text, MLV_Color color){
 	b->x = x;
 	b->y = y;
 	b->length_x = length_x;
 	b->length_y = length_y;
-	b->bool_press = bool_press;
 	b->action = act;
 	b->text = text;
 	b->color = color;
 }
 
-Button* create_button(int x, int y, int length_x, int length_y, int bool_press, Action act, char* text, MLV_Color color){
+Button* create_button(int x, int y, int length_x, int length_y, Action act, char* text, MLV_Color color){
 	Button* b;
 
 	b = (Button*)malloc(sizeof(Button));
 	if(NULL == b)
 		return NULL;
-	init_button(b, x, y, length_x, length_y, bool_press, act, text, color);
+	init_button(b, x, y, length_x, length_y, act, text, color);
 	return b;
 }
 
@@ -37,4 +36,8 @@ void draw_button(Button* button){
 void display_button_info(Button* b){
 	printf("Position : %d %d\n", b->x, b->y);
 	printf("Length : %d %d\n", b->length_x, b->length_y);
+}
+
+void free_button(Button* b){
+	free(b);	
 }

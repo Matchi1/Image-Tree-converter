@@ -141,61 +141,59 @@ int test_read_write_BitFile(){
 	if(test_read_BitFile(&in, 10, arr_bit) == 0)
 		return 0;
 
-	printf("OK\n");
 	return 1;
 }
 
 int comp_decomp(){
 	Quadtree qt;
 	Quadtree qt_decomp;
-	char file_name[] = "test/test.qtc";
+	char file_name[] = "img/test.qtc";
 	
 	srand(time(NULL));
-	generate_qt(&qt);
+	generate_qt(&qt);  /* generate a random quadtree */
 	qt_decomp = NULL;
 
 	if(qt == NULL)
 		return 0;
-	
-	printf("\tCompression... ");
-	if(compression(file_name, qt) == 0)
+	if(compression(file_name, qt) == 0)  /* Save the Quadtree */
 		return 0;
-	display_qt_pdf(qt);
-	MLV_wait_seconds(5);
+	display_qt_pdf(qt, "compression_tmp.pdf");
+	MLV_draw_text(0, 40, "Test compression OK", MLV_COLOR_WHITE);
 	
-	printf("\tDecompression... ");
-	if(decompression(file_name, &qt_decomp) == 0)	
+	if(decompression(file_name, &qt_decomp) == 0) /* Load the Quadtree */
 		return 0;
-	display_qt_pdf(qt_decomp);
+	display_qt_pdf(qt_decomp, "decompression_tmp.pdf");
+	MLV_draw_text(0, 60, "Test decompression OK", MLV_COLOR_WHITE);
+	free_quadtree(&qt);
+	free_quadtree(&qt_decomp);
 
-	return 1;
-}
-
-int test_Quadtree(){
-	printf("  TEST QUADTREE\n");
 	return 1;
 }
 
 int test_BitFile(){
-	printf("  TEST BITFILE\n");
+	MLV_draw_text(0, 0, "Test BitFile", MLV_COLOR_WHITE);
 	if(test_read_write_BitFile() == 0)
 		return 0;
+	MLV_draw_text(100, 0, "OK", MLV_COLOR_WHITE);
 	return 1;
 }
 
 int test_Comp_Decomp(){
-	printf("  TEST COMPRESSION ET DECOMPRESSION\n");
+	MLV_draw_text(0, 20, "Test Compression Decompression", MLV_COLOR_WHITE);
 	if(comp_decomp() == 0)
 		return 0;
+	MLV_draw_text(250, 20, "OK", MLV_COLOR_WHITE);
 	return 1;
 }
 
 int test(){
-	if(test_Quadtree() == 0)
-		return 0;
+	MLV_clear_window(MLV_COLOR_BLACK);
 	if(test_BitFile() == 0)
 		return 0;
 	if(test_Comp_Decomp() == 0)
 		return 0;
+	MLV_draw_text(0, 80, "Test successful !!", MLV_COLOR_WHITE);
+	MLV_actualise_window();
+	MLV_wait_seconds(5);
 	return 1;
 }

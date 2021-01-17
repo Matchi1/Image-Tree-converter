@@ -1,12 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-#include <MLV/MLV_all.h>
 #include "../include/Input_img.h"
 #include "../include/Calcul.h"
 #include "../include/Hashtable.h"
 #include "../include/Graphic.h"
 
+/**
+ * Determine the highest error in the element in a hashtable
+ * @param ht the hashtable
+ * @return the Node structure containing the highest error value
+ */
 Node* max_error_node(List* ht){
 	int i;
 	Node* max_error_node;
@@ -19,6 +23,14 @@ Node* max_error_node(List* ht){
 	return max_error_node;
 }
 
+/**
+ * Initialize the 4 areas that will divide the current pixel
+ * @param area1 a pointor to a pointor to a Pixel structure
+ * 		  area2 a pointor to a pointor to a Pixel structure
+ *  	  area3 a pointor to a pointor to a Pixel structure
+ *  	  area4 a pointor to a pointor to a Pixel structure
+ *  	  next_divide a pointor to a Node structure
+ */
 void init_areas(Pixel** area1, Pixel** area2, Pixel** area3, Pixel** area4, Node* next_divide){
 	Pixel* pixel;
 	int len;
@@ -33,7 +45,16 @@ void init_areas(Pixel** area1, Pixel** area2, Pixel** area3, Pixel** area4, Node
 	*area4 = create_pixel(pixel->x, pixel->y + len, len, NULL);
 }
 
-int divide_pixel(MLV_Image* img, Node** node, Pixel* ref){
+/**
+ * Attribute an error value to a new Node structure
+ * Information about the current zone of the image are contained
+ * in a Pixel structure 
+ * @param img a pointor to a MLV_Image structure
+ * 		  Node a pointor to a pointor to a Node structure
+ * 		  ref a pointor a Pixel structure
+ * @return 0 if an error occurred else 1
+ */
+int attribute_error(MLV_Image* img, Node** node, Pixel* ref){
 	int error_val;
 
 	average_color(img, ref);
@@ -43,13 +64,29 @@ int divide_pixel(MLV_Image* img, Node** node, Pixel* ref){
 	return 1;
 }
 
-void input_init_sons(MLV_Image* img, Node* node, Pixel* area1, Pixel* area2, Pixel* area3, Pixel* area4){
-	divide_pixel(img, &(node->sonNW), area1);
-	divide_pixel(img, &(node->sonNE), area2);
-	divide_pixel(img, &(node->sonSE), area3);
-	divide_pixel(img, &(node->sonSW), area4);
+/**
+ * Attribute error value to each area that divide the current zone of the image
+ * those error values are stored to each son of the specified Node structure
+ * @param img a pointor a MLV_Image structure
+ * 		  node a pointor to a Node structure
+ * 		  area1 a pointor to a Pixel structure
+ * 		  area2 a pointor to a Pixel structure
+ * 		  area3 a pointor to a Pixel structure
+ * 		  area4 a pointor to a Pixel structure
+ */
+void attribute_errors(MLV_Image* img, Node* node, Pixel* area1, Pixel* area2, Pixel* area3, Pixel* area4){
+	attribute_error(img, &(node->sonNW), area1);
+	attribute_error(img, &(node->sonNE), area2);
+	attribute_error(img, &(node->sonSE), area3);
+	attribute_error(img, &(node->sonSW), area4);
 }
 
+/**
+ * Add the sons of the specified Node structure
+ * into a hashtable
+ * @param ht the hashtable
+ * 		  node a pointor to a Node structure
+ */
 void add_ht_sons(List* ht, Node* node){
 	add_ht_node(ht, node->sonNW);
 	add_ht_node(ht, node->sonNE);
@@ -57,6 +94,11 @@ void add_ht_sons(List* ht, Node* node){
 	add_ht_node(ht, node->sonSW);
 }
 
+/**
+ * Draw the pixel in an MLV window
+ * represented by each son of the specified Node structure
+ * @param node a pointor to a Node structure
+ */
 void draw_sons(Node* node){
 	draw_pixel(node->sonNW->pixel);
 	draw_pixel(node->sonNE->pixel);
@@ -64,15 +106,27 @@ void draw_sons(Node* node){
 	draw_pixel(node->sonSW->pixel);
 }
 
-void refresh_display(int* count_div, int* refresh){
-	if(*count_div == *refresh){
+/**
+ * Define the refresh frame rate of the conversion
+ * @param count_div a pointor to an int value
+ * 		  limit a pointor to an int value 
+ */
+void refresh_display(int* count_div, int* limit){
+	if(*count_div == *limit){
 		MLV_actualise_window();
-		*refresh <<= 1;
+		*limit <<= 1;
 		MLV_wait_milliseconds(100);
 	}
 	(*count_div)++;
 }
 
+/**
+ * Auxiliary function
+ * Create the representation of an image into a Quadtree
+ * @param img a pointor to a MLV_Image pointor
+ * 		  ht the hashtable
+ * Note : the Quadtree is created through the hashtable
+ */
 void input_create_qt_aux(MLV_Image* img, List* ht){
 	Node* next_divide;
 	int count_div, refresh;
@@ -87,7 +141,7 @@ void input_create_qt_aux(MLV_Image* img, List* ht){
 	do {
 		next_divide = max_error_node(ht);											/* Find the pixel with the highest error in the current Quadtree */
 		init_areas(&area1, &area2, &area3, &area4, next_divide);					/* Initialize the 4 areas of the pixel with the highest error*/	
-		input_init_sons(img, next_divide, area1, area2, area3, area4); 				/* Initalize the sons of the node with the highest error */	
+		attribute_errors(img, next_divide, area1, area2, area3, area4); 				/* Initalize the sons of the node with the highest error */	
 		add_ht_sons(ht, next_divide); 												/* Add sons of this node to the HashTable*/
 		remove_ht_node(ht, next_divide);											/* Remove this node from the HashTable */
 		draw_sons(next_divide);
@@ -95,6 +149,12 @@ void input_create_qt_aux(MLV_Image* img, List* ht){
 	} while(next_divide->error_val != 0);
 }
 
+/**
+ * Create a Quadtree structure depending on the specified image
+ * @param img a pointor to a MLV_Image structure
+ * 		  qt a pointor to a Quadtree structure
+ * @return 0 if an error occurred else 1
+ */
 int input_create_qt(MLV_Image* img, Quadtree* qt){
 	List* ht;
 	Pixel* first;
@@ -107,13 +167,19 @@ int input_create_qt(MLV_Image* img, Quadtree* qt){
 	if(first == NULL)
 		return 0;
 
-	divide_pixel(img, qt, first);	/* Creation of the root of the tree */
+	attribute_error(img, qt, first);	/* Creation of the root of the tree */
 	add_ht_node(ht, *qt);			/* Add the root in the HashTable */
 	input_create_qt_aux(img, ht);	/* Creation of the tree */
 	free_ht(ht);
 	return 1;
 }
 
+/**
+ * Convert an image into a Quadtree structure
+ * @param img a pointor to MLV_Image structure
+ * 	      qt a pointor to a Quadtree structure
+ * @return 0 if an error occurred else 1
+ */
 int convert_img_qt(MLV_Image* img, Quadtree* qt){
 	assert(img != NULL);
 	assert(qt != NULL);

@@ -11,14 +11,6 @@ void init_color(int* rgba, int r, int g, int b, int a){
 	rgba[3] = a;
 }
 
-void init_color_BW(int* color, int bw){
-	assert(color != NULL);
-	if(bw == 1)
-		init_color(color, 255, 255, 255, color[3]);
-	else
-		init_color(color, 0, 0, 0, color[3]);
-}
-
 int* create_color(int r, int g, int b, int a){
 	int* rgba;	
 
@@ -27,6 +19,20 @@ int* create_color(int r, int g, int b, int a){
 		return NULL;
 	init_color(rgba, r, g, b, a);
 	return rgba;
+}
+
+/**
+ * Initialize an rgba array with black or white color
+ * @param color an array representing rgba value
+ * 		  bw a boolean value that assign the color
+ * 		  the array should be assigned
+ */
+void init_color_BW(int* color, int bw){
+	assert(color != NULL);
+	if(bw == 1)
+		init_color(color, 255, 255, 255, 255);
+	else
+		init_color(color, 0, 0, 0, 255);
 }
 
 void display_color(int* color){
@@ -47,6 +53,10 @@ int verify_color(int* c1, int* c2){
 	return 1;
 }
 
+void convert_rgba_to_BW(int* color){
+	init_color_BW(color, black_or_white(color));
+}
+
 int black_or_white(int* color){
 	float avr_gray = 0.2126*color[0] + 0.7152*color[1] + 0.0722*color[2];
 	if(avr_gray > 128)
@@ -63,10 +73,6 @@ int color_equals(int* c1, int* c2){
 			return 0;
 	}
 	return 1;
-}
-
-void convert_rgba_to_BW(int* color){
-	init_color_BW(color, black_or_white(color));
 }
 
 void free_color(int* color){

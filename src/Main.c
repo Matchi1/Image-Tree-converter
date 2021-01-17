@@ -1,5 +1,5 @@
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <MLV/MLV_all.h>
 #include "../include/Graphic.h"
 #include "../include/Quadtree.h"
@@ -21,43 +21,6 @@ void select_menu(int* choice){
 	scanf("%d", choice);
 }
 
-void presentation(){
-	Quadtree qt;
-	MLV_Image* img;
-	char* file_name = "img/img1.jpg";
-	MLV_create_window("Pixel", "Pixel", MAXPIXEL, MAXPIXEL);
-
-	qt = NULL;
-	img = MLV_load_image(file_name);
-	if(img == NULL){
-		fprintf(stderr, "Image not found !!!\n");
-		return;
-	}
-	MLV_resize_image(img, MAXPIXEL, MAXPIXEL);
-	MLV_draw_image(img, 0, 0);
-
-	MLV_actualise_window();
-	MLV_wait_seconds(2);
-
-	MLV_clear_window(MLV_COLOR_BLACK);
-	MLV_actualise_window();
-	convert_img_qt(img, &qt);
-	
-	MLV_wait_seconds(1);
-	MLV_free_window();
-}
-
-void basic_menu(int choice){
-	switch(choice){
-		case 1:
-			test(); break;
-		case 2:
-			presentation(); break;
-		default:
-			presentation(); break;
-	}
-}
-
 void code(){
 	Action action;
 	Quadtree qt;
@@ -66,11 +29,13 @@ void code(){
 	MLV_create_window("Pixel", "Pixel", MAX_SCREEN_X, MAX_SCREEN_Y);
 
 	action = NONE;
+	qt = NULL;
 	while(action != QUIT){
 		action = menu(MAX_SCREEN_X, MAX_SCREEN_Y);
 		choice(action, &info, &qt);
 	}
 
+	free_quadtree(&qt);
 	MLV_free_window();
 }
 

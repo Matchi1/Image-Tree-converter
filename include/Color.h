@@ -19,14 +19,6 @@ void init_color(int* rgba, int r, int g, int b, int a);
 int* create_color(int r, int g, int b, int a);
 
 /**
- * Initialize a color with black or white.
- * @parameters color a pointor to a Color. 
- * 			   bw a number representing a black(other number) or white(1)
- * @return void.
- */
-void init_color_BW(int* color, int bw);
-
-/**
  * Display the colors contained in color.
  * @parameters color a pointor to a Color. 
  * @return void.
@@ -48,10 +40,27 @@ int verify_color(int* c1, int* c2);
  */
 void convert_rgba_to_BW(int* color);
 
+/**
+ * Determine which color, between black and white,
+ * the specified color is closer to
+ * @param color an array representing a color
+ * @return 0 means the color is closer to white
+ * than black else 1
+ */
 int black_or_white(int* color);
 
-void free_color(int* color);
-
+/**
+ * Verify if 2 colors are the same or not
+ * @param c1 an array representing a color
+ * 		  c2 an array representing a color
+ * @return 1 if the 2 colors are equals else 0
+ */
 int color_equals(int* c1, int* c2);
+
+/**
+ * Free the memory space used by a color
+ * @param color a an array representing a color
+ */
+void free_color(int* color);
 
 #endif

@@ -36,3 +36,12 @@ void init_image(Image* info, char* file_name){
 		info->img = NULL;
 	free(file_name);
 }
+
+void free_image(Image* info){
+	if(NULL != info){
+		if(NULL != info->file_name)
+			free(info->file_name);
+		if(NULL != info->img)
+			MLV_free_image(info->img);
+	}
+}

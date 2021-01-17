@@ -46,17 +46,13 @@ int is_leave(Node* node){
 	return 0;
 }
 
-void free_quadtree(Quadtree* qt){
-	if(*qt != NULL){
-		free_quadtree(&((*qt)->sonNW));
-		free_quadtree(&((*qt)->sonNE));
-		free_quadtree(&((*qt)->sonSE));
-		free_quadtree(&((*qt)->sonSW));
-		free_pixel((*qt)->pixel);
-		free(*qt);
-		*qt = NULL;
+int is_empty(Quadtree qt){
+	if(qt == NULL){
+		printf("Arbre Vide\n");
+		return 1;
 	}
-}	
+	return 0;
+}
 
 void display_node(Node* node){
 	assert(node != NULL);
@@ -77,10 +73,15 @@ void display_qt(Quadtree qt){
 	display_qt(qt->sonSE);
 }
 
-int is_empty(Quadtree qt){
-	if(qt == NULL){
-		printf("Arbre Vide\n");
-		return 1;
+void free_quadtree(Quadtree* qt){
+	if(*qt != NULL){
+		free_quadtree(&((*qt)->sonNW));
+		free_quadtree(&((*qt)->sonNE));
+		free_quadtree(&((*qt)->sonSE));
+		free_quadtree(&((*qt)->sonSW));
+		if((*qt)->pixel != NULL)
+			free_pixel((*qt)->pixel);
+		free(*qt);
+		*qt = NULL;
 	}
-	return 0;
-}
+}	

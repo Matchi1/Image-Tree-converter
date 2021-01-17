@@ -5,10 +5,10 @@
 #include "Quadtree.h"
 
 /**
- * Convert an image into a Quadtree.
- * @parameters file_name the name of the file.
- * 			   qt a pointor to a Quadtree.
- * @return 1 if the conversion was successeful else 0.
+ * Convert an image into a Quadtree structure
+ * @param img a pointor to MLV_Image structure
+ * 	      qt a pointor to a Quadtree structure
+ * @return 0 if an error occurred else 1
  */
 int convert_img_qt(MLV_Image* img, Quadtree* qt);
 

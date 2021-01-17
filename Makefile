@@ -27,9 +27,6 @@ Quadtree.o: Quadtree.c Quadtree.h Color.h Pixel.h
 Graphic.o: Graphic.c Graphic.h
 	$(CC) -o $(BIN_PATH)$@ -c $< $(CFLAGS)
 
-Test.o: Test.c Test.h Quadtree.h Color.h Compression.h Decompression.h Display_qt.h BitFile.h Graphic.h
-	$(CC) -o $(BIN_PATH)$@ -c $< $(CFLAGS)
-
 Compression.o: Compression.c Compression.h Quadtree.h Extension.h BitFile.h
 	$(CC) -o $(BIN_PATH)$@ -c $< $(CFLAGS)
 
@@ -71,9 +68,14 @@ Image.o: Image.c Image.h
 
 Minimisation.o: Minimisation.c Minimisation.h  
 	$(CC) -o $(BIN_PATH)$@ -c $< $(CFLAGS)
+
+Test.o: Test.c Test.h Quadtree.h Color.h Compression.h Decompression.h Display_qt.h BitFile.h Graphic.h
+	$(CC) -o $(BIN_PATH)$@ -c $< $(CFLAGS)
 	
 clean:
-	rm -f tmp.*
+	rm -f tmp.dot
+	rm -f compression_tmp.pdf
+	rm -f decompression_tmp.pdf
 	rm -f $(BIN_PATH)*.o
 
 mrproper: clean

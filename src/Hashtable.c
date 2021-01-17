@@ -20,6 +20,11 @@ List* create_ht(){
 	return ht;
 }
 
+/**
+ * Initialize an Element structure
+ * @param elt the Element structure to initialize
+ * 		  node a pointor to a Node structure 
+ */
 void init_element(Element* elt, Node* node){
 	assert(elt != NULL);
 	elt->node = node;
@@ -41,11 +46,6 @@ int get_key(Node* node){
 	x = node->pixel->x;
 	y = node->pixel->y;
 	return x ^ y;
-}
-
-void add_ht_node(List* ht, Node* node){
-	int key = get_key(node) % HT_MAX_LEN;
-	add_list_node(&(ht[key]), node);
 }
 
 void add_lst_element(List* lst, Element* new){
@@ -84,6 +84,11 @@ int add_list_node(List* lst, Node* node){
 		return 0;
 	add_lst_element(lst, new);
 	return 1;
+}
+
+void add_ht_node(List* ht, Node* node){
+	int key = get_key(node) % HT_MAX_LEN;
+	add_list_node(&(ht[key]), node);
 }
 
 int remove_list_node(List* lst, Node* node){

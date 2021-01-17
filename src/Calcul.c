@@ -6,6 +6,11 @@
 #include "../include/Calcul.h"
 #include "../include/Pixel.h"
 
+/**
+ * Return the square of a value
+ * @param the value to compute
+ * @return the result
+ */
 int math_square(int value){
 	return ( value ) * ( value );
 }

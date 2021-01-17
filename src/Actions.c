@@ -9,10 +9,15 @@
 #include "../include/Buttons.h"
 #include "../include/Image.h"
 #include "../include/Extension.h"
+#include "../include/Test.h"
 
 #define SAVE_COLOR 1
 #define SAVE_BW 0
 
+/**
+ * Initialize an MLV_Input_box structure.
+ * @param box a pointor to a pointor of MLV_Input_box structure
+ */
 void init_box(MLV_Input_box** box){
 	*box = MLV_create_input_box(
 			DEFAULT_POS_X, DEFAULT_POS_Y, 
@@ -22,26 +27,29 @@ void init_box(MLV_Input_box** box){
 		);
 } 
 
-void draw_center_image(MLV_Image* img){
-	int x, y;
-
-	x = (MAX_SCREEN_X - MAXPIXEL) / 2;
-	y = (MAX_SCREEN_Y - MAXPIXEL) / 2;
-	MLV_draw_image(img, x, y);
-	MLV_actualise_window();
-	MLV_wait_seconds(2);
-}
-
+/**
+ * Convert an image contained in a file
+ * into a Quadtree.
+ * @param info a pointor to an Image structure
+ * 		  qt a pointor to a Quadtree structure
+ */
 void convert(Image* info, Quadtree* qt){
+	if(NULL == *qt)
+		free_quadtree(qt);
 	if(extension_qt(info->file_name) != -1){
 		decompression(info->file_name, qt);
 		MLV_clear_window(MLV_COLOR_BLACK);
-		graphic_quadtree(0, 0, MAXPIXEL, *qt);
+		graphic_quadtree(0, 0, *qt);
 		MLV_wait_seconds(2);
 	} else 
 		convert_img_qt(info->img, qt);
 }
 
+/**
+ * Select the file image according to the information
+ * in the Image structure
+ * @param info a pointor to an Image structure
+ */
 void select_image(Image* info){
 	MLV_Input_box* box;
 	char* file_name;
@@ -57,20 +65,50 @@ void select_image(Image* info){
 		draw_center_image(info->img);
 }
 
+/**
+ * Save the rgba representation of an image by a Quadtree structure
+ * into a file.
+ * @param info a pointor to an Image structure
+ * 		  qt a Quadtree structure
+ */
 void save_color(Image* info, Quadtree qt){
 	char* path_save;
 	path_save = extension_save_file(info->file_name, 1);
 	compression(path_save, qt);
 }
 
+/**
+ * Save the black and white representation of an image 
+ * by a Quadtree structure into a file.
+ * @param info a pointor to an Image structure
+ * 		  qt a Quadtree structure
+ */
 void save_bw(Image* info, Quadtree qt){
 	char* path_save;
 	path_save = extension_save_file(info->file_name, 0);
 	compression(path_save, qt);
 }
 
-void minimize(Quadtree* qt){
-	minimisation(qt);
+/**
+ * Save the minimized Quadtree into a GMC file
+ * @param info a pointor to the Image structure
+ * 		  qt a pointor to a Quadtree
+ */
+void min_color(Image* info, Quadtree qt){
+	char* path_save;
+	path_save = extension_save_min(info->file_name, 1);
+	compression(path_save, qt);
+}
+
+/**
+ * Save the minimized Quadtree into a GMN file
+ * @param info a pointor to the Image structure
+ * 		  qt a pointor to a Quadtree
+ */
+void min_bw(Image* info, Quadtree qt){
+	char* path_save;
+	path_save = extension_save_min(info->file_name, 0);
+	compression(path_save, qt);
 }
 
 void choice(Action action, Image* info, Quadtree* qt){
@@ -85,10 +123,21 @@ void choice(Action action, Image* info, Quadtree* qt){
 		case SAVE_N: 
 			save_bw(info, *qt);
 			break;
-		case MINIMI: 
-			minimize(qt);
+		case MIN:
+			minimisation(qt);
 			break;
-
+		case SAVE_MIN_C: 
+			min_color(info, *qt);
+			break;
+		case SAVE_MIN_N:
+			min_bw(info, *qt);
+			break;
+		case TEST:
+			if(test())
+				printf("Test successful !!\n");
+			else
+				printf("Test failed !!\n");
+			break;
 		default: break;
 	}
 }

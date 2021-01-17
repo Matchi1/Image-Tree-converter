@@ -6,6 +6,15 @@
 #include "../include/Compression.h"
 #include "../include/BitFile.h"
 
+/**
+ * Count the number of bit a Quadtree will generate during
+ * compression.
+ * @argument qt a Quadtree
+ *           len_bits a pointor containing the number of bits
+ *           display_bw number representing the format of compression
+ *           (compression for colored image or black & white image)
+ * @return void
+ */
 void count_bit(Quadtree qt, int* nb_bits, int display_color){
 	assert(nb_bits != NULL);
 
@@ -24,14 +33,27 @@ void count_bit(Quadtree qt, int* nb_bits, int display_color){
 	}
 }
 
-int count_padding(Quadtree qt, int display_color){
+/**
+ * Count the padding depending on the Quadtree structure
+ * and the encription of the Quadtree.
+ * @param qt a Quadtree structure
+ * 		  display_bw a boolean value 
+ * @return the padding 
+ */
+int count_padding(Quadtree qt, int display_bw){
 	int padding, nb_bits;
 
-	count_bit(qt, &nb_bits, display_color);
+	count_bit(qt, &nb_bits, display_bw);
 	padding = (nb_bits + 3) % 8;
 	return padding;
 }
 
+/**
+ * Write the specified padding into a file contained in BitFile
+ * @parameters out a pointor to a BitFile Structure
+ * 			   padding the specified padding
+ * @return 0 if the padding is too big else 1
+ */
 int write_padding(BitFile* out, int padding){
 	int mask, i;
 
@@ -49,10 +71,22 @@ int write_padding(BitFile* out, int padding){
 	return 1;
 }
 
+/**
+ * Write the bit representing the black or white color
+ * depending on the specified color in the Node structure
+ * @parameters out a pointor to a BitFile structure
+ * 			   color an array representing rgba color
+ */
 void write_B_W(BitFile* out, int* color){
 	write_BitFile(out, black_or_white(color));
 }
 
+/**
+ * Write the bits representing the specified unite color
+ * into a file contained in the BitFile structure
+ * @parameters out a pointor to a BitFile structure
+ * 			   unite the specified unite color
+ */
 void write_unite(BitFile* out, int unite){
 	int i, mask;
 
@@ -65,6 +99,12 @@ void write_unite(BitFile* out, int unite){
 	}
 }
 
+/**
+ * Write the bits representing the specified color
+ * into a file contained in the BitFile structure
+ * @parameters out a pointor to a BitFile structure
+ * 			   color an array representing rgba color
+ */
 void write_rgba(BitFile* out, int* color){
 	int i;
 	for(i = 0; i < 4; i++){
@@ -72,6 +112,14 @@ void write_rgba(BitFile* out, int* color){
 	}
 }
 
+/**
+ * Write the bits representing a tree depending on the prefix browse
+ * into a file contained in the bitFile structure
+ * It writes the black & white version of this tree
+ * @parameters out a pointor to a BitFile structure
+ * 			   qt a Quadtree structure
+ * 			   bw value representing how to convert the image's color (rgba or black and white)
+ */
 void prefix(BitFile* out, Quadtree qt, void (*write_color)(BitFile* out, int* color)){
 	if(is_leave(qt) == 1){
 		write_BitFile(out, 1);
