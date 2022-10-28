@@ -4,9 +4,9 @@
 #include "Quadtree.h"
 
 /**
- * Minimize a Quadtree
+ * @brief Minimize a Quadtree
  * @param qt a pointor to a Quadtree structure
- * @return 0 if an error occurred else 1
+ * @ret 0 if an error occurred else 1
  */
 int minimisation(Quadtree* qt);
 

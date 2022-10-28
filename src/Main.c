@@ -6,13 +6,14 @@
 #include "../include/Compression.h"
 #include "../include/Decompression.h"
 #include "../include/Test.h"
-#include "../include/Input_img.h"
+#include "../include/Input.h"
 #include "../include/Hashtable.h"
 #include "../include/Calcul.h"
 #include "../include/Menu.h"
-#include "../include/Buttons.h"
+#include "../include/Figures.h"
 #include "../include/Actions.h"
 #include "../include/Image.h"
+#include "../include/Window.h"
 
 void select_menu(int* choice){
 	printf("1: Test\n");
@@ -26,12 +27,12 @@ void code(){
 	Quadtree qt;
 	Image info;
 
-	MLV_create_window("Pixel", "Pixel", MAX_SCREEN_X, MAX_SCREEN_Y);
+	MLV_create_window("Pixel", "Pixel", WINDOW_W, WINDOW_H);
 
 	action = NONE;
 	qt = NULL;
 	while(action != QUIT){
-		action = menu(MAX_SCREEN_X, MAX_SCREEN_Y);
+		action = menu(WINDOW_W, WINDOW_H);
 		choice(action, &info, &qt);
 	}
 

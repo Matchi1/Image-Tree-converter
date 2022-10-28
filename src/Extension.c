@@ -28,7 +28,7 @@ int extension_qt(char* file_name){
  * @param file_name the file name
  * @return the index where the extension start in a file name
  */
-int index_dot(char* file_name){
+int index_dot(char *file_name){
 	int i, file_len;
 
 	file_len = strlen(file_name);
@@ -36,7 +36,7 @@ int index_dot(char* file_name){
 	return i;
 }
 
-char* extension_save_file(char* file_name, int bool_color){
+char* extension_save_file(char *file_name, int bool_color){
 	int len_new_name, len_name;
 	char* new_name;
 
@@ -53,15 +53,15 @@ char* extension_save_file(char* file_name, int bool_color){
 	return new_name;
 }
 
-char* extension_save_min(char* file_name, int bool_color){
+char* extension_save_min(char *file_name, int bool_color){
 	int len_new_name, len_name;
 	char* new_name;
 
 	len_name = index_dot(file_name) + 1;
 	len_new_name = len_name + 3 + 1;
-	new_name = (char*)malloc(sizeof(char) * len_new_name);
+	new_name = (char *)malloc(sizeof(char) * len_new_name);
 	if(new_name == NULL)
-		return new_name;
+		return NULL;
 	strncpy(new_name, file_name, len_name);
 	if(bool_color == 1)
 		strcat(new_name, "gmc");

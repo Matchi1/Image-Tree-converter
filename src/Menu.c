@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <MLV/MLV_all.h>
 #include "../include/Menu.h"
-#include "../include/Buttons.h"
+#include "../include/Figures.h"
 
 #define NB_BUTTONS 8
 #define INITIAL_Y 20
@@ -17,9 +17,9 @@
 
 /**
  * Initialize the buttons necessary for the menu
- * @param arr_buttons an array of Button structure
+ * @param arr_buttons an array of Figure structure
  */
-void init_menu_button(Button* arr_buttons){
+void init_menu_button(Figure* arr_buttons){
 	init_button(&(arr_buttons[0]), DEFAULT_POS_X, DEFAULT_POS_Y, DEFAULT_LEN_X, DEFAULT_LEN_Y, SELECT, TEXT_SELECT, DEFAULT_COLOR);	
 	init_button(&(arr_buttons[1]), DEFAULT_POS_X, DEFAULT_POS_Y, DEFAULT_LEN_X, DEFAULT_LEN_Y, SAVE_N, TEXT_SAVE_N, DEFAULT_COLOR);	
 	init_button(&(arr_buttons[2]), DEFAULT_POS_X, DEFAULT_POS_Y, DEFAULT_LEN_X, DEFAULT_LEN_Y, SAVE_C, TEXT_SAVE_C, DEFAULT_COLOR);	
@@ -33,10 +33,10 @@ void init_menu_button(Button* arr_buttons){
 /**
  * Align the buttons on the center of the screen
  * @param width width of the window
- * 		  height height of the window
- * 		  arr_buttons an array of Button structure
+ * @param height height of the window
+ * @param arr_buttons an array of Figure structure
  */
-void align_buttons(int width, int height, Button* arr_buttons){
+void align_buttons(int width, int height, Figure* arr_buttons){
 	int i, x, y;
 	for(i = 0; i < NB_BUTTONS; i++){
 		x = (width - arr_buttons[i].length_x) / 2;
@@ -51,9 +51,9 @@ void align_buttons(int width, int height, Button* arr_buttons){
 
 /**
  * Draw the buttons of the menu 
- * @param arr_buttons an array of Button structure
+ * @param arr_buttons an array of Figure structure
  */
-void draw_buttons(Button* arr_buttons){
+void draw_buttons(Figure* arr_buttons){
 	int i;
 	for(i = 0; i < NB_BUTTONS; i++)
 		draw_button(&(arr_buttons[i]));
@@ -64,10 +64,10 @@ void draw_buttons(Button* arr_buttons){
  * Verify if a button have been pressed by the user with a mouse click
  * @param x the position of the click in the X axis
  * 	   	  y the position of the click in the Y axis
- * 	   	  arr_buttons an array of Button structure
- * @return the associated Action of the button else -1
+ * 	   	  arr_buttons an array of Figure structure
+ * @ret the associated Action of the button else -1
  */
-int click_on_buttons(int x, int y, Button* arr_buttons){
+int click_on_buttons(int x, int y, Figure* arr_buttons){
 	int i, x_min, x_max, y_min, y_max;
 	for(i = 0; i < NB_BUTTONS; i++){
 		x_min = arr_buttons[i].x;
@@ -84,26 +84,23 @@ int click_on_buttons(int x, int y, Button* arr_buttons){
  * Enter into the menu of the project
  * This menu display the action that can be done by the program
  * @param width width of the window
- * 		  height height of the window
- * @return the action choosen by the user
+ * @param height height of the window
+ * @ret the action choosen by the user
  */
 Action menu(int width, int height){
-	Button arr_buttons[NB_BUTTONS];
+	Figure arr_buttons[NB_BUTTONS];
 	int x, y;
-	Action value;
+	Action value = -1;
 
-	value = -1;
 	init_menu_button(arr_buttons);
 	align_buttons(width, height, arr_buttons);
 
 	MLV_clear_window(MLV_COLOR_BLACK);
 	draw_buttons(arr_buttons);
 
-	while(1){
-		MLV_wait_mouse_or_seconds(&x, &y, 2);
+	while(value == -1){
+		MLV_wait_mouse(&x, &y);
 		value = click_on_buttons(x, y, arr_buttons);
-		if(value != -1)
-			break;
 	}
 	MLV_actualise_window();
 	return value;

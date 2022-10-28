@@ -5,11 +5,10 @@
 #include "Image.h"
 
 /**
- * Enum that specify the action that can be done
- * by the user
+ * @brief Enum that specify the action that can be done by the user
  */
 typedef enum {
-	SELECT,
+	SELECT = 0,
 	SAVE_N,
 	SAVE_C,
 	MIN,
@@ -21,12 +20,12 @@ typedef enum {
 }Action;
 
 /**
- * Execute an action according to the specified action.
+ * @brief Execute an action according to the specified action.
  * This action can impact an Image structure and a 
  * Quadtree structure
  * @param action the specified action
- * 		  info a pointor to an Image structure
- * 		  qt a pointor to a Quadtree structure
+ * @param info a pointor to an Image structure
+ * @param qt a pointor to a Quadtree structure
  */
 void choice(Action action, Image* info, Quadtree* qt);
 

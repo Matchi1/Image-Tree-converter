@@ -153,7 +153,6 @@ int compression(char* file_name, Quadtree qt){
 		prefix(&out, qt, write_B_W);
 	else 
 		prefix(&out, qt, write_rgba);
-	printf("OK\n");
 	close_BitFile(&out);
 	return 1;
 }

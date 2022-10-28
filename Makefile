@@ -12,71 +12,61 @@ vpath %.o bin
 vpath %.c src
 vpath %.h include
 
-$(EXEC): $(LDLIBS)
+$(EXEC): bin_file show_file $(LDLIBS)
 	$(CC) -o $@ $(LDLIBS_PATH) $(CFLAGS) $(LDFLAGS)
 
+bin_file:
+	mkdir -p $(BIN_PATH)
+
+show_file:
+	@echo $(LDLIBS)
+
 Main.o: Main.c 
-	$(CC) -o $(BIN_PATH)$@ -c $< $(CFLAGS)
 
 Color.o: Color.c Color.h
-	$(CC) -o $(BIN_PATH)$@ -c $< $(CFLAGS)
 
 Quadtree.o: Quadtree.c Quadtree.h Color.h Pixel.h
-	$(CC) -o $(BIN_PATH)$@ -c $< $(CFLAGS)
 
 Graphic.o: Graphic.c Graphic.h
-	$(CC) -o $(BIN_PATH)$@ -c $< $(CFLAGS)
 
 Compression.o: Compression.c Compression.h Quadtree.h Extension.h BitFile.h
-	$(CC) -o $(BIN_PATH)$@ -c $< $(CFLAGS)
 
 Decompression.o: Decompression.c Decompression.h Quadtree.h Extension.h BitFile.h Color.h 
-	$(CC) -o $(BIN_PATH)$@ -c $< $(CFLAGS)
 
 BitFile.o: BitFile.c BitFile.h  
-	$(CC) -o $(BIN_PATH)$@ -c $< $(CFLAGS)
 
-Menu.o: Menu.c Menu.h  
-	$(CC) -o $(BIN_PATH)$@ -c $< $(CFLAGS)
+Input.o: Input.c Input.h Quadtree.h 
 
-Input_img.o: Input_img.c Input_img.h Quadtree.h 
-	$(CC) -o $(BIN_PATH)$@ -c $< $(CFLAGS)
-	
 Pixel.o: Pixel.c Pixel.h Color.h 
-	$(CC) -o $(BIN_PATH)$@ -c $< $(CFLAGS)
 
 Extension.o: Extension.c Extension.h  
-	$(CC) -o $(BIN_PATH)$@ -c $< $(CFLAGS)
 
 Display_qt.o: Display_qt.c Display_qt.h Quadtree.h 
-	$(CC) -o $(BIN_PATH)$@ -c $< $(CFLAGS)
 
 Calcul.o: Calcul.c Calcul.h Color.h 
-	$(CC) -o $(BIN_PATH)$@ -c $< $(CFLAGS)
 
 Hashtable.o: Hashtable.c Hashtable.h Quadtree.h 
-	$(CC) -o $(BIN_PATH)$@ -c $< $(CFLAGS)
 
 Buttons.o: Buttons.c Buttons.h  
-	$(CC) -o $(BIN_PATH)$@ -c $< $(CFLAGS)
 
 Actions.o: Actions.c Actions.h  
-	$(CC) -o $(BIN_PATH)$@ -c $< $(CFLAGS)
 
 Image.o: Image.c Image.h  
-	$(CC) -o $(BIN_PATH)$@ -c $< $(CFLAGS)
+
+Menu.o: Menu.c Menu.h  
 
 Minimisation.o: Minimisation.c Minimisation.h  
-	$(CC) -o $(BIN_PATH)$@ -c $< $(CFLAGS)
 
 Test.o: Test.c Test.h Quadtree.h Color.h Compression.h Decompression.h Display_qt.h BitFile.h Graphic.h
+
+%.o: %.c
 	$(CC) -o $(BIN_PATH)$@ -c $< $(CFLAGS)
-	
+
 clean:
 	rm -f tmp.dot
 	rm -f compression_tmp.pdf
 	rm -f decompression_tmp.pdf
-	rm -f $(BIN_PATH)*.o
+	rm -rf $(BIN_PATH)
 
 mrproper: clean
 	rm -f $(EXEC)

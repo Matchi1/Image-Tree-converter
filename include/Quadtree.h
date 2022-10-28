@@ -26,60 +26,58 @@ typedef struct node{
 }Node, *Quadtree;
 
 /**
- * Create a node with the element in argument.
+ * @brief Create a node with the element in argument.
  * @param color a pointor to a Color.
- * 			    p a pointor to a Pixel.
- * @return a pointor to a node.
+ * @param p a pointor to a Pixel.
+ * @ret a pointor to a node.
  */
 Node* create_node(Pixel* p, int error_val);
 
 /**
- * Initialize a node with the label and a color.
+ * @brief Initialize a node with the label and a color.
  * @param node a pointor to a Node.
- * 			    color a pointor to a Color.
- * 			    p a pointor to a Pixel.
- * @return void.
+ * @param color a pointor to a Color.
+ * @param p a pointor to a Pixel.
  */
 void init_node(Node* node, Pixel* p, int error_val);
 
 /**
- * Add sons to a quadtree.
+ * @brief Add sons to a quadtree.
  * @param qt a Quadtree
- * 			    nb_sons the numbers of sons in the array of son.
- * 			    arr_sons an array of sons
- * @return 1 if executed correctly else 0.
+ * @param nb_sons the numbers of sons in the array of son.
+ * @param arr_sons an array of sons
+ * @ret 1 if executed correctly else 0.
  */
 int add_sons(Quadtree qt, int nb_sons, Node* arr_sons); 
 
 /**
- * Verify if node is a leave.
+ * @brief Verify if node is a leave.
  * @param node a pointor to a Node.
- * @return 1 if it is a leave else 0.
+ * @ret 1 if it is a leave else 0.
  */
 int is_leave(Node* node);
 
 /**
- * Verify if the Quadtree is empty.
+ * @brief Verify if the Quadtree is empty.
  * @param qt a Quadtree.
- * @return 1 if the Quadtree is empty else 0.
+ * @ret 1 if the Quadtree is empty else 0.
  */
 int is_empty(Quadtree qt);
 
 /**
- * Display a Node
+ * @brief Display a Node
  * @param node a pointor to a Node structure
  */
 void display_node(Node* node);
 
 /**
- * Display a Quadtree.
+ * @brief Display a Quadtree.
  * @param qt a Quadtree.
- * @return void
  */
 void display_qt(Quadtree qt);
 
 /**
- * Free a Quadtree structure
+ * @brief Free a Quadtree structure
  * @param qt a pointor to a Quadtree structure
  */
 void free_quadtree(Quadtree* qt);

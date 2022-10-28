@@ -12,7 +12,7 @@
 #include "../include/Compression.h"
 #include "../include/Decompression.h"
 #include "../include/Display_qt.h"
-
+#include "../include/Window.h"
 int* generate_rgba(){
 	int* rgba;
 	rgba = (int*)malloc(sizeof(int) * 4);
@@ -64,9 +64,9 @@ Pixel* generate_pixel(int nb_pixel){
 		return NULL;
 
 	for(i = 0; i < nb_pixel; i++){
-		x = rand() % MAXPIXEL;
-		y = rand() % MAXPIXEL;
-		length = rand() % MAXPIXEL;
+		x = rand() % IMAGE_SIZE;
+		y = rand() % IMAGE_SIZE;
+		length = rand() % IMAGE_SIZE;
 		color = *generate_color(1);
 		init_pixel(&(arr_pixel[i]), x, y, length, color);
 	}
@@ -74,7 +74,6 @@ Pixel* generate_pixel(int nb_pixel){
 }
 
 void generate_qt(Quadtree *qt){
-
 	*qt = create_node(generate_pixel(1), 0);
 	(*qt)->sonNW = create_node(generate_pixel(1), 0);
 	(*qt)->sonNE = create_node(generate_pixel(1), 0);

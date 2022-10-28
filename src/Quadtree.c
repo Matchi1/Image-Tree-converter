@@ -47,10 +47,8 @@ int is_leave(Node* node){
 }
 
 int is_empty(Quadtree qt){
-	if(qt == NULL){
-		printf("Arbre Vide\n");
+	if(qt == NULL)
 		return 1;
-	}
 	return 0;
 }
 
@@ -75,12 +73,12 @@ void display_qt(Quadtree qt){
 
 void free_quadtree(Quadtree* qt){
 	if(*qt != NULL){
+		if((*qt)->pixel != NULL)
+			free_pixel((*qt)->pixel);
 		free_quadtree(&((*qt)->sonNW));
 		free_quadtree(&((*qt)->sonNE));
 		free_quadtree(&((*qt)->sonSE));
 		free_quadtree(&((*qt)->sonSW));
-		if((*qt)->pixel != NULL)
-			free_pixel((*qt)->pixel);
 		free(*qt);
 		*qt = NULL;
 	}

@@ -27,11 +27,7 @@ void init_colors(Node* node, int* c1, int* c2, int* c3, int* c4){
  * @return 0 if an error occurred else 1
  */
 int minimisation(Quadtree* qt){
-	int* c1;
-	int* c2;
-	int* c3;
-	int* c4;
-	int* color;
+	int *c1, *c2, *c3, *c4, *color;
 
 	c1 = c2 = c3 = c4 = color = NULL;
 	if(*qt == NULL)

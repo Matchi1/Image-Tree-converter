@@ -4,15 +4,16 @@
 #include "../include/Minimisation.h"
 #include "../include/Compression.h"
 #include "../include/Decompression.h"
-#include "../include/Input_img.h"
+#include "../include/Input.h"
 #include "../include/Graphic.h"
-#include "../include/Buttons.h"
+#include "../include/Figures.h"
 #include "../include/Image.h"
 #include "../include/Extension.h"
 #include "../include/Test.h"
 
 #define SAVE_COLOR 1
 #define SAVE_BW 0
+
 
 /**
  * Initialize an MLV_Input_box structure.
@@ -115,23 +116,17 @@ void choice(Action action, Image* info, Quadtree* qt){
 	switch(action){
 		case SELECT:
 			select_image(info);
-			convert(info, qt);
-			break;
+			convert(info, qt); break;
 		case SAVE_C:
-			save_color(info, *qt);
-			break;
+			save_color(info, *qt); break;
 		case SAVE_N: 
-			save_bw(info, *qt);
-			break;
+			save_bw(info, *qt); break;
 		case MIN:
-			minimisation(qt);
-			break;
+			minimisation(qt); break;
 		case SAVE_MIN_C: 
-			min_color(info, *qt);
-			break;
+			min_color(info, *qt); break;
 		case SAVE_MIN_N:
-			min_bw(info, *qt);
-			break;
+			min_bw(info, *qt); break;
 		case TEST:
 			if(test())
 				printf("Test successful !!\n");

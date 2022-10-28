@@ -9,39 +9,37 @@ typedef struct {
 } Pixel;
 
 /**
- * Create a Pixel.
- * @parameters x position of the pixel in the x axis.
- * 			   y position of the pixel in the y axis.
- * 			   length length of the pixel.
- * @return a Pixel if there is enough memory space else NULL.
+ * @brief Create a Pixel.
+ * @param x position of the pixel in the x axis.
+ * @param y position of the pixel in the y axis.
+ * @param length length of the pixel.
+ * @ret a Pixel if there is enough memory space else NULL.
  */
 Pixel* create_pixel(int x, int y, int length, int* color);
 
 /**
- * Initialize a Pixel
- * @parameters p a pointor to a Pixel
- * 			 x position in the x axis
- * 			 y position in the y axis
- * 			 length length of the side of the Pixel
- * @return void
+ * @brief Initialize a Pixel
+ * @param p a pointor to a Pixel
+ * @param x position in the x axis
+ * @param y position in the y axis
+ * @param length length of the side of the Pixel
  */
 void init_pixel(Pixel* p, int x, int y, int length, int* color);
 
 /**
- * Display element in a pixel.
- * @parameters p a pointor to a Pixel
- * @return void
+ * @brief Display element in a pixel.
+ * @param p a pointor to a Pixel
  */
 void display_pixel(Pixel* p);
 
 /**
- * Draw a pixel into an MLV window
+ * @brief Draw a pixel into an MLV window
  * @param pixel a pointor to a Pixel structure
  */
 void draw_pixel(Pixel* pixel);
 
 /**
- * Free a Pixel structure
+ * @brief Free a Pixel structure
  * @param p a pointor to a Pixel structure
  */
 void free_pixel(Pixel* p);

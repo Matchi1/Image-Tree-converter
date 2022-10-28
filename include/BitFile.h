@@ -8,35 +8,35 @@ typedef struct {
 }BitFile;
 
 /**
- * Create an BitFile depending the file name
+ * @brief Create an BitFile depending the file name
  * and the format of the file. (read-only...)
- * @return an BitFile if enough memory space else NULL.
+ * @ret an BitFile if enough memory space else NULL.
  */
 BitFile* create_BitFile(char* file_name, char* format);
 
 /**
- * Initialize the BitFile depending the file name
+ * @brief Initialize the BitFile depending the file name
  * and the format.
- * @return 1 if executed correctly else 0.
+ * @ret 1 if executed correctly else 0.
  */
 void init_BitFile(BitFile* f, char* file_name, char* format);
 
 /**
- * Close the file contained in the BitFile.
- * @return the return value of the fclose function.
+ * @brief Close the file contained in the BitFile.
+ * @ret the return value of the fclose function.
  */
 int close_BitFile(BitFile* f);
 
 /**
- * Read the file in the BitFile and put
+ * @brief Read the file in the BitFile and put
  * the character in a buffer.
- * @return the last bit read.
+ * @ret the last bit read.
  */
 int read_BitFile(BitFile* in);
 
 /**
- * Write the buffer into the file contained in out.
- * @return 1 if executed correctly else 0.
+ * @brief Write the buffer into the file contained in out.
+ * @ret 1 if executed correctly else 0.
  */ 
 int write_BitFile(BitFile* out, int bit);
 

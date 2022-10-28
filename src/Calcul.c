@@ -25,7 +25,7 @@ float dist(const int* c1, const int* c2){
 	a = math_square(c1[3] - c2[3]);
 
 	distance = sqrt(r + g + b + a);
-	return distance;	
+	return distance;
 }
 
 void average_color(MLV_Image* img, Pixel* area){
@@ -49,23 +49,24 @@ void average_color(MLV_Image* img, Pixel* area){
 			a_sum += a;
 		}
 	}
-	init_color(avr_rgba, r_sum / nb_pixel, g_sum / nb_pixel, b_sum / nb_pixel, a_sum / nb_pixel);
+	init_color(avr_rgba, r_sum / nb_pixel, g_sum / nb_pixel, b_sum / nb_pixel,
+			a_sum / nb_pixel);
 	area->color = avr_rgba;
 }
 
 int error(MLV_Image* img, Pixel* area){
 	int i, j, error;
 	int rgba[4];
-	
+
 	error = 0;
 	for(i = 0; i < area->length; i++){
 		for(j = 0; j < area->length; j++){
 			MLV_get_pixel_on_image(
 					img,
-					area->x + i, area->y + j, 
+					area->x + i, area->y + j,
 					&rgba[0], &rgba[1], &rgba[2], &rgba[3]
 					);
-			error += dist(rgba, area->color);	
+			error += dist(rgba, area->color);
 		}
 	}
 	return error;

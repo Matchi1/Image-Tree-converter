@@ -1,10 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-#include "../include/Input_img.h"
+#include "../include/Input.h"
 #include "../include/Calcul.h"
 #include "../include/Hashtable.h"
 #include "../include/Graphic.h"
+#include "../include/Window.h"
 
 /**
  * Determine the highest error in the element in a hashtable
@@ -163,7 +164,7 @@ int input_create_qt(MLV_Image* img, Quadtree* qt){
 	ht = create_ht();
 	if(ht == NULL)
 		return 0;
-	first = create_pixel(0, 0, MAXPIXEL, NULL);
+	first = create_pixel(0, 0, IMAGE_SIZE, NULL);
 	if(first == NULL)
 		return 0;
 

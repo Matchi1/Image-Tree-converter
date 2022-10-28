@@ -16,29 +16,28 @@ typedef struct {
 }Image;
 
 /**
- * Return the path of the specified file name
+ * @brief Return the path of the specified file name
  * @param file_name a file name
- * @return the path of this file
+ * @ret the path of this file
  */
 char* path_image(char* file_name);
 
 /**
- * Load an image with the path of a file
+ * @brief Load an image with the path of a file
  * @param path the path of the file
- * @return a MLV_Image structure representing
- * an image
+ * @ret a MLV_Image structure representing an image
  */
 MLV_Image* load_image(char* path);
 
 /**
- * Initialize an Image structure
+ * @brief Initialize an Image structure
  * @param info a pointor to an image structure
- *        file_name a file_name
+ * @param file_name a file_name
  */
 void init_image(Image* info, char* file_name);
 
 /**
- * free an Image structure
+ * @brief free an Image structure
  * @param info a pointor to an Image structure
  */
 void free_image(Image* info);
